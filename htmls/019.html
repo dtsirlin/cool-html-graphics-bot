@@ -1,0 +1,81 @@
+<head>
+<title>20151219</title>
+<link rel="icon" href="http://csh.bz/favicon.ico"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-touch-fullscreen" content="yes"/>
+<style>
+body, canvas {
+margin: 0;
+padding: 0;
+border: 0;
+}
+canvas{background-color:hsl(0,0%,8%);}
+</style>
+</head>
+<body></body>
+<script>
+console.clear()
+var PI = Math.PI, t=0, startTime=Date.now()
+function sin(a){return Math.sin(a)}
+function cos(a){return Math.cos(a)}
+function hypot(a,b){return Math.sqrt(a*a+b*b)}
+function rainbow(a){
+var r = 127 + 127 * sin(a),
+ g = 127 + 127 * sin(a+2),
+b = 127 + 127 * sin(a+4)
+return "rgba("+(r|0)+","+(g|0)+","+(b|0)+",0.3)"}
+canvas = document.createElement('canvas')
+ctx = canvas.getContext('2d')
+document.body.appendChild(canvas)
+canvas.resizeHandler = function(){
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+canvas.min = Math.min(canvas.width,canvas.height)
+canvas.max = Math.max(canvas.width,canvas.height)
+canvas.hyp = hypot(canvas.width,canvas.height)}
+canvas.resizeHandler()
+window.addEventListener('resize', canvas.resizeHandler, false)
+
+//ctx.globalCompositeOperation = 'lighter'
+function animloop() {
+animloop.id = requestAnimationFrame(animloop)
+t = (Date.now() - startTime)/1000
+
+ctx.clearRect(0,0,canvas.width,canvas.height)
+ctx.strokeStyle ='hsla(0,0%,100%,0.125)'
+ctx.fillStyle = 'hsla(210,100%,25%,0.1)'
+ctx.lineWidth = 2
+var radius = canvas.hyp/8, slices = PI/180,
+	width = radius, height = radius,
+	xcenter = canvas.width/2
+	ycenter = canvas.height/2
+
+//for(arc = slices ; arc <= PI*2; arc += slices) {
+//var x = sin(arc-PI/3+t/5*1)*radius + xcenter,
+//	y = cos(arc+PI/2+t/5*1)*radius + ycenter
+//height = sin(arc*1+t/2.1)*radius/6+radius/3 + 3
+//ctx.save()
+//ctx.translate(x, y)
+//ctx.rotate(arc/2 + t*0+sin((x+y)/radius+t*0.125*1))
+//ctx.fillStyle = 'hsla('+(arc/PI*180)+',100%,25%,0.1)'
+//ctx.fillRect(-width/2, -height/2, width, height)
+//ctx.strokeRect(-width/2, -height/2, width, height)
+//ctx.restore()
+//}
+for(arc = slices ; arc <= PI*2; arc += slices) {
+var x = sin(arc-PI/3+t/5*1)*radius + xcenter,
+	y = cos(arc+PI/2+t/5*1)*radius + ycenter
+height = sin(arc*1+t/2.1)*radius/4+radius/3 + 3
+ctx.save()
+ctx.translate(x, y)
+ctx.rotate(arc/2 + t*0+sin((x+y)/radius+t*0.125*1))
+//ctx.fillRect(-width/2, -height/2, width, height)
+ctx.strokeRect(-width/2, -height/2, width, height)
+ctx.restore()
+}
+
+}
+animloop()
+</script>
