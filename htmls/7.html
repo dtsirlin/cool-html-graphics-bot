@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<head>
+<title>20160129</title>
+<style>
+body, canvas {margin: 0;padding: 0;border: 0;}
+canvas{background-color:hsl(0,9%,9%); position:fixed;}
+</style>
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="http://csh.bz/2016/01/14/preview.png">
+<meta name="twitter:site" content="@noisia">
+<meta name="twitter:creator" content="@noisia">
+<meta name="twitter:title" content="20160129">
+<meta name="twitter:description" content="20160129">
+<!-- <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=no"> -->
+
+</head>
+<body></body>
+<script type="text/javascript">
+// ellipse polyfill via https://github.com/google/canvas-5-polyfill/blob/master/canvas.js
+if (CanvasRenderingContext2D.prototype.ellipse == undefined) {
+  CanvasRenderingContext2D.prototype.ellipse = function(x, y, radiusX, radiusY, rotation, startAngle, endAngle, antiClockwise) {
+    this.save();
+    this.translate(x, y);
+    this.rotate(rotation);
+    this.scale(radiusX, radiusY);
+    this.arc(0, 0, 1, startAngle, endAngle, antiClockwise);
+    this.restore();
+  }
+}
+// end polyfill
+console.clear()
+var PI = Math.PI, TAU=Math.PI*2, t=0, startTime=Date.now()
+function sin(a){return Math.sin(a)}
+function cos(a){return Math.cos(a)}
+function hypot(a,b){return Math.sqrt(a*a+b*b)}
+function hsla(h,s,l,a) {
+  return "hsla(" + h + "," + s  + "%," + l + "%," + a + ")"
+}
+function rainbow(a, offset, mid, breadth){
+  var r = mid + (breadth/2|0) * sin(a+0*offset),
+    g = mid + (breadth/2|0) * sin(a+2*offset),
+    b = mid + (breadth/2|0) * sin(a+4*offset)
+  return "rgba("+(r|0)+","+(g|0)+","+(b|0)+",0.3)"
+}
+function polygon(x,y,sides,radius, rotation){
+  ctx.save()
+  ctx.translate(x,y)
+  ctx.beginPath()
+  ctx.moveTo(sin(0+rotation)*radius,cos(0+rotation)*radius)
+  for (var i = TAU/sides; i < TAU; i+=TAU/sides) {
+    ctx.lineTo(sin(i+rotation)*radius, cos(i+rotation)*radius)
+  }
+  ctx.closePath()
+  ctx.restore()}
+canvas = document.createElement('canvas')
+ctx = canvas.getContext('2d')
+document.body.appendChild(canvas)
+canvas.resizeHandler = function(){
+  canvas.width = window.innerWidth // window.devicePixelRatio
+  canvas.height = window.innerHeight // window.devicePixelRatio
+  canvas.min = Math.min(canvas.width,canvas.height)
+  canvas.max = Math.max(canvas.width,canvas.height)
+  canvas.hyp = hypot(canvas.width,canvas.height)
+}
+canvas.resizeHandler()
+window.addEventListener('resize', canvas.resizeHandler, false)
+
+function animloop() {
+  animloop.id = requestAnimationFrame(animloop)
+  t = (Date.now() - startTime)/1000
+  ctx.clearRect(0,0,canvas.width,canvas.height)
+  ctx.strokeStyle = 'white'
+  var max = canvas.hyp / 4,
+      min = 0,
+      stride = 4
+  for (var i = max; i > min; i -= stride) {
+    ctx.save()
+    ctx.translate(canvas.width/2, canvas.height/2)
+    polygon(0,0,3,i, i/max*PI/3*sin(t/10-i/max/PI)-t/12)
+    ctx.stroke()
+    ctx.restore()
+  }
+}
+animloop()
+</script>

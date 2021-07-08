@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<!-- source: http://jsbin.com/mokopa/10 -->
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=4, minimum-scale=4 maximum-scale=4">
+  <title>EO</title>
+<style id="jsbin-css">
+body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  float: left;
+  position: absolute;
+/*   background-color:hsla(0,0%,90%,1); */
+  color: white;
+}
+div{
+  position: absolute;
+  font-family: monospace;
+}
+
+</style>
+</head>
+<body>
+
+<script id="jsbin-javascript">
+console.clear()
+canvas = document.createElement('canvas')
+ctx = canvas.getContext('2d')
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+document.body.appendChild(canvas)
+var f = 0,
+    t = 0
+    startTime = Date.now()
+    PI = Math.PI,
+    TAU = Math.PI*2;
+function sin(a){return Math.sin(a)}
+function cos(a){return Math.cos(a)}
+function tan(a){return Math.tan(a)}
+function hsla(h,s,l,a) {
+  return "hsla(" + h + ", " + s + "%, " + l + "%, " + a + ")"
+}
+function rgba(r,g,b,a) {
+  return "rgba(" + (r|0) + ", " + (g|0) + ", " + (b|0) + ", " + a + ")"
+}
+function rainbow(a, offset) {
+  var r = 127 + 127 * sin(a + 0*offset),
+      g = 127 + 127 * sin(a + 2*offset),
+      b = 127 + 127 * sin(a + 4*offset)
+  return rgba(r,g,b,1)
+}
+document.body.style.backgroundColor = hsla(0,3,1,1)
+var side = canvas.width/5
+ctx.fillStyle = hsla(0,0,0,1)
+ctx.fillRect(0,0,canvas.width,canvas.height)
+ctx.lineCap = 'round'
+ctx.fillStyle = hsla(0,0,0,0.01)
+function animloop() {
+  requestAnimationFrame(animloop)
+  f += 1
+  t = (Date.now() - startTime)/1000
+  ctx.save()
+  ctx.translate(canvas.width/2,canvas.height/2)
+  ctx.rotate(PI/1000*sin(t/22))
+  ctx.drawImage(canvas, sin(t/36)/4 - canvas.width/2, -3 - canvas.height/2)
+  ctx.restore()
+  ctx.fillStyle = hsla(0,0,0,0.01)
+  ctx.fillRect(0,0,canvas.width,canvas.height)
+  ctx.lineWidth = 4
+  ctx.strokeStyle = 'black'
+  for (i = 0; i <= TAU; i+=TAU/4){
+    ctx.save()
+    ctx.translate(canvas.width/2, canvas.height/4*3)
+    ctx.beginPath()
+    ctx.arc(sin(i-t/48)*(side), cos(i-t/48)*(side), side, 0+t/12+i+PI, PI+t/12+i+PI, false)
+    ctx.stroke()
+    ctx.restore()
+  }
+  ctx.lineWidth = 2
+  ctx.strokeStyle = rainbow(PI/24*37 + sin(t/3)/35, 0.85)
+  for (i = 0; i <= TAU; i+=TAU/4){
+    ctx.save()
+    ctx.translate(canvas.width/2, canvas.height/4*3)
+    ctx.beginPath()
+    ctx.arc(sin(i-t/48)*(side), cos(i-t/48)*(side), side, 0+t/12+i+PI, PI+t/12+i+PI, false)
+    ctx.stroke()
+    ctx.restore()
+  }
+//   diagText.innerHTML = "w: " + window.innerWidth + "x" + window.innerHeight + "<br>c: " + canvas.width + "x" + canvas.height + "<br>fps: " + ((f/t)|0)
+//   diagText.innerHTML = ((f/t)|0)
+
+}
+var diagText = document.createElement('div')
+diagText.top = 0
+diagText.left = 0
+diagText.style.width = '8em'
+diagText.style.backgroundColor = hsla(0,0,0,1)
+diagText.style.zIndex = 1000
+
+document.body.appendChild(diagText)
+console.log(diagText)
+animloop()
+
+</script>
+
+<script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080, height=1920, initial-scale=4, minimum-scale=4 maximum-scale=4">
+  <title>EO</title>
+</head>
+<body>
+
+</body>
+</html></script>
+
+<script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  float: left;
+  position: absolute;
+/*   background-color:hsla(0,0%,90%,1); */
+  color: white;
+}
+div{
+  position: absolute;
+  font-family: monospace;
+}
+</script>
+
+<script id="jsbin-source-javascript" type="text/javascript">console.clear()
+canvas = document.createElement('canvas')
+ctx = canvas.getContext('2d')
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+document.body.appendChild(canvas)
+var f = 0,
+    t = 0
+    startTime = Date.now()
+    PI = Math.PI,
+    TAU = Math.PI*2;
+function sin(a){return Math.sin(a)}
+function cos(a){return Math.cos(a)}
+function tan(a){return Math.tan(a)}
+function hsla(h,s,l,a) {
+  return "hsla(" + h + ", " + s + "%, " + l + "%, " + a + ")"
+}
+function rgba(r,g,b,a) {
+  return "rgba(" + (r|0) + ", " + (g|0) + ", " + (b|0) + ", " + a + ")"
+}
+function rainbow(a, offset) {
+  var r = 127 + 127 * sin(a + 0*offset),
+      g = 127 + 127 * sin(a + 2*offset),
+      b = 127 + 127 * sin(a + 4*offset)
+  return rgba(r,g,b,1)
+}
+document.body.style.backgroundColor = hsla(0,3,1,1)
+var side = canvas.width/5
+ctx.fillStyle = hsla(0,0,0,1)
+ctx.fillRect(0,0,canvas.width,canvas.height)
+ctx.lineCap = 'round'
+ctx.fillStyle = hsla(0,0,0,0.01)
+function animloop() {
+  requestAnimationFrame(animloop)
+  f += 1
+  t = (Date.now() - startTime)/1000
+  ctx.save()
+  ctx.translate(canvas.width/2,canvas.height/2)
+  ctx.rotate(PI/1000*sin(t/22))
+  ctx.drawImage(canvas, sin(t/36)/4 - canvas.width/2, -3 - canvas.height/2)
+  ctx.restore()
+  ctx.fillStyle = hsla(0,0,0,0.01)
+  ctx.fillRect(0,0,canvas.width,canvas.height)
+  ctx.lineWidth = 4
+  ctx.strokeStyle = 'black'
+  for (i = 0; i <= TAU; i+=TAU/4){
+    ctx.save()
+    ctx.translate(canvas.width/2, canvas.height/4*3)
+    ctx.beginPath()
+    ctx.arc(sin(i-t/48)*(side), cos(i-t/48)*(side), side, 0+t/12+i+PI, PI+t/12+i+PI, false)
+    ctx.stroke()
+    ctx.restore()
+  }
+  ctx.lineWidth = 2
+  ctx.strokeStyle = rainbow(PI/24*37 + sin(t/3)/35, 0.85)
+  for (i = 0; i <= TAU; i+=TAU/4){
+    ctx.save()
+    ctx.translate(canvas.width/2, canvas.height/4*3)
+    ctx.beginPath()
+    ctx.arc(sin(i-t/48)*(side), cos(i-t/48)*(side), side, 0+t/12+i+PI, PI+t/12+i+PI, false)
+    ctx.stroke()
+    ctx.restore()
+  }
+//   diagText.innerHTML = "w: " + window.innerWidth + "x" + window.innerHeight + "<br>c: " + canvas.width + "x" + canvas.height + "<br>fps: " + ((f/t)|0)
+//   diagText.innerHTML = ((f/t)|0)
+
+}
+var diagText = document.createElement('div')
+diagText.top = 0
+diagText.left = 0
+diagText.style.width = '8em'
+diagText.style.backgroundColor = hsla(0,0,0,1)
+diagText.style.zIndex = 1000
+
+document.body.appendChild(diagText)
+console.log(diagText)
+animloop()
+</script></body>
+</html>
