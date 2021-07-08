@@ -1,0 +1,61 @@
+<head>
+<title>title</title>
+<link rel="icon" href="http://csh.bz/favicon.ico"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-touch-fullscreen" content="yes"/>
+<style>
+body, canvas {
+margin: 0;
+padding: 0;
+border: 0;
+}
+canvas{background-color:black;}
+</style>
+</head>
+<body></body>
+<script>
+console.clear()
+var PI = Math.PI, t=0, startTime=Date.now()
+function sin(a){return Math.sin(a)}
+function hypot(a,b){return Math.sqrt(a*a+b*b)}
+function rainbow(a){
+var r = 127 + 127 * sin(a),
+ g = 127 + 127 * sin(a+2),
+b = 127 + 127 * sin(a+4)
+return "rgba("+(r|0)+","+(g|0)+","+(b|0)+",0.3)"}
+canvas = document.createElement('canvas')
+ctx = canvas.getContext('2d')
+document.body.appendChild(canvas)
+canvas.resizeHandler = function(){
+canvas.width = window.innerWidth
+canvas.height = window.innerHeight
+}
+canvas.resizeHandler()
+window.addEventListener('resize', canvas.resizeHandler, false)
+canvas.min = Math.min(canvas.width,canvas.height)
+canvas.max = Math.max(canvas.width,canvas.height)
+canvas.hyp = hypot(canvas.width,canvas.height)
+// ctx.globalCompositeOperation = 'lighter'
+function animloop() {
+animloop.id = requestAnimationFrame(animloop)
+t = (Date.now() - startTime)/1000
+//ctx.fillStyle = 'hsla(0,0%,0%,0.03)'
+//ctx.fillRect(0,0,canvas.width,canvas.height)
+ctx.clearRect(0,0,canvas.width,canvas.height)
+var dens = 180
+for(i=PI/dens*0;i<=PI*2-PI/dens*0;i+=PI/dens){
+var r = i/1+t/32+sin(i*8*sin(t/48))
+ctx.save()
+ctx.translate(canvas.width/2,canvas.height/2)
+ctx.rotate(r)
+
+//ctx.fillStyle = 'hsla('+(i/PI*180)+',100%,50%,0.4)'
+ctx.fillStyle = rainbow(t/16+i+PI)
+ctx.fillRect(canvas.hyp/8 * sin(i*2+t/16),0,2, canvas.hyp/8*sin(i/2))
+ctx.restore()
+}
+}
+animloop()
+</script>

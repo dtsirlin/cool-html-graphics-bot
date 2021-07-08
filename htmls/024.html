@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/bumper.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>bumper</title>
+	<meta name="description" content="HTML5 canvas animation by chris shier">
+	<meta property="og:title" content="bumper">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="http://csh.bz/jsb/bumper/">
+	<meta property="og:image" content="http://csh.bz/jsb/bumper.png">
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:image" content="http://csh.bz/jsb/bumper.png">
+	<meta name="twitter:site" content="@noisia">
+	<meta name="twitter:creator" content="@noisia">
+	<meta name="twitter:title" content="bumper">
+	<meta name="twitter:description" content="canvas animation">
+</head>
+<body style="background-color: black;">
+
+
+
+
+<script>
+/*
+bumper
+*/
+document.body.style.cssText='background-color:black;'
+canvas = document.createElement('canvas')
+ctx = canvas.getContext('2d')
+canvas.style.cssText='position:fixed;top:0;left:0;width:100%;height:100%'
+canvas.resizeHandler = function(){
+  canvas.width = window.innerWidth 
+  canvas.height= window.innerHeight
+}
+window.addEventListener('resize',canvas.resizeHandler,false)
+canvas.resizeHandler()
+PI = Math.PI
+function sin(a){return Math.sin(a)}
+function animloop(){
+  t = animloop.id / 60
+  ctx.save()
+  PIt = ((animloop.id%360) / 360 ) * PI
+  ctx.fillStyle = 'black'
+  ctx.fillRect(0,0,canvas.width,canvas.height)
+  ctx.translate((canvas.width/2|0)+0.5, (canvas.height/2|0)+0.5)
+  h = Math.min(canvas.width,canvas.height) - 100
+  w = h/2
+  thin = w/6
+  ctx.strokeStyle = 'white'
+  ctx.strokeRect(-h/2,-h/2,h,h)
+  max = 950
+  ctx.strokeStyle = 'hsla(0,0%,100%,'+(sin(t*100)*0.0019+0.1) + ')'
+  for(i=0;i<max;i+=16){
+    ctx.rotate(PI/270*sin(t/6-i/max*PI))
+    ctx.translate(sin(t/16)*1,0)
+    ctx.strokeRect(-thin/2,-w,thin,h)
+  }
+  ctx.restore()
+  animloop.id = requestAnimationFrame(animloop)
+}
+animloop()
+document.body.appendChild(canvas)
+</script><canvas width="1618" height="857" style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%;"></canvas></body></html>

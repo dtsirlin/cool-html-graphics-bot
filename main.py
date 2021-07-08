@@ -1,16 +1,27 @@
-import webbrowser as wb
 import pathlib as pl
 import os
 import secrets
+import time
+
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
+chrome_options = Options()
+chrome_options.add_argument('--kiosk')
+chrome_options.add_experimental_option(
+    "excludeSwitches", ["enable-automation"])
 
 defaultDirectory = str(pl.Path().resolve()) + '/htmls'
+
 
 def getParameters():
     return getDirectory(), getLoopCount(), getLoopTime()
 
+
 def getDirectory():
-    userInput = input (str('Enter a path for the directory of files (leave blank for default of ' + defaultDirectory + '): '))
-    
+    userInput = input(str(
+        'Enter a path for the directory of files (leave blank for default of ' + defaultDirectory + '): '))
+
     if not userInput:
         directory = defaultDirectory
     else:
@@ -21,8 +32,9 @@ def getDirectory():
     else:
         raise Exception('File doesn\'t exist.')
 
+
 def getLoopCount():
-    userInput = input ('How many images do you want to view?: ')
+    userInput = input('How many images do you want to view?: ')
 
     try:
         userInput = int(userInput)
@@ -33,9 +45,10 @@ def getLoopCount():
             raise Exception('Value must be positive.')
     except:
         raise Exception('Value must be integer.')
+
 
 def getLoopTime():
-    userInput = input ('How many second do you want to view each image for?: ')
+    userInput = input('How many second do you want to view each image for?: ')
 
     try:
         userInput = int(userInput)
@@ -47,25 +60,45 @@ def getLoopTime():
     except:
         raise Exception('Value must be integer.')
 
-def openURL(url):
-    wb.get('safari').open_new(url)
-    return 
 
 def getFiles(parentDirectory):
-    print('Reading files from:',parentDirectory)
+    print('Reading files from:', parentDirectory)
     return os.listdir(parentDirectory)
+
 
 def getSortedFiles(parentDirectory):
     return sorted(getFiles(parentDirectory))
 
+
+# remove files without html extension from files list
+def getHTMLFiles(unfilteredFiles):
+    outputFilesList = []
+
+    for file in unfilteredFiles:
+        if len(file) >= 5:
+            if file.endswith('.html'):
+                outputFilesList.append(file)
+
+    return outputFilesList
+
+
 def runLoop(files, loopCount, loopTime):
+    chromedriver = webdriver.Chrome(
+        str(pl.Path().resolve()) + '/chromedriver', chrome_options=chrome_options)
+
     i = 0
 
     while i < loopCount:
         file = secrets.SystemRandom().choice(files)
-        print('Iteration:',i,'Filename:',file)
-        openURL('file://' + str(pl.Path().resolve()) + file)
+        print('Iteration:', i, 'Filename:', file)
+        openURL(chromedriver, 'file://' + defaultDirectory + '/' + file)
         i += 1
+        time.sleep(loopTime)
+
+
+def openURL(chromedriver, url):
+    chromedriver.get(url)
+
 
 if __name__ == '__main__':
     print('Starting...\n')
@@ -75,6 +108,7 @@ if __name__ == '__main__':
     loopTime = inputValues[2]
 
     files = getSortedFiles(filePath)
-    
-    runLoop(files, loopCount, loopTime)
+    cleanedFiles = getHTMLFiles(files)
+
+    runLoop(cleanedFiles, loopCount, loopTime)
     print('\nExiting...')
