@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/guwiwu.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="./059_files/three.min.js"></script>
+  
+  <title>another try</title>
+<style id="jsbin-css">
+body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+canvas{
+  position: fixed;
+}
+</style>
+</head>
+<body>
+
+<script id="jsbin-javascript">
+(function() {
+  var PI, abs, animloop, camera, cos, distance, frame, hypotenuse, renderer, resizeHandler, scene, seed, sin, skybox, sqrt, start, t;
+
+  console.clear();
+
+  t = 0;
+
+  start = Date.now();
+
+  seed = Math.random() * 1000;
+
+  frame = 0;
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  cos = function(a) {
+    return Math.cos(a);
+  };
+
+  abs = function(a) {
+    return Math.abs(a);
+  };
+
+  sqrt = function(a) {
+    return Math.sqrt(a);
+  };
+
+  hypotenuse = function(a, b) {
+    return Math.sqrt(a * a + b * b);
+  };
+
+  distance = function(x1, y1, x2, y2) {
+    return hypotenuse(x2 - x1, y2 - y1);
+  };
+
+  window.hyp = hypotenuse(window.innerWidth, window.innerHeight);
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, -window.hyp, window.hyp);
+
+  renderer = new THREE.WebGLRenderer();
+
+  document.body.appendChild(renderer.domElement);
+
+  (resizeHandler = function() {
+    window.hyp = hypotenuse(window.innerWidth, window.innerHeight);
+    return renderer.setSize(window.innerWidth, window.innerHeight);
+  })();
+
+  window.addEventListener('resize', resizeHandler, false);
+
+  skybox = new THREE.Mesh(new THREE.BoxGeometry(window.hyp, window.hyp, window.hyp, 20, 20, 20), new THREE.MeshBasicMaterial({
+    color: 0xffffff,
+    wireframe: true
+  }));
+
+  scene.add(skybox);
+
+  console.dir(skybox);
+
+  (animloop = function() {
+    animloop.id = requestAnimationFrame(animloop);
+    t = (Date.now() - start) / 1000;
+    skybox.rotation.x = t / 5;
+    skybox.rotation.y = t / 10;
+    renderer.render(scene, camera);
+  })();
+
+}).call(this);
+
+</script><canvas width="3232" height="1714" style="width: 1616px; height: 857px;"></canvas>
+
+
+<script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+canvas{
+  position: fixed;
+}</script>
+
+<script id="jsbin-source-javascript" type="text/coffeescript">console.clear()
+
+t = 0
+start = Date.now()
+seed = Math.random()*1000
+frame = 0
+PI = Math.PI
+sin = (a) -> Math.sin(a)
+cos = (a) -> Math.cos(a)
+abs = (a) -> Math.abs(a)
+sqrt = (a) -> Math.sqrt(a)
+hypotenuse = (a, b) -> Math.sqrt(a*a+b*b)
+distance = (x1, y1, x2, y2) -> hypotenuse(x2-x1, y2-y1)
+
+window.hyp = hypotenuse window.innerWidth, window.innerHeight
+
+scene = new THREE.Scene()
+camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, -window.hyp, window.hyp )
+renderer = new THREE.WebGLRenderer()
+
+document.body.appendChild renderer.domElement
+
+do resizeHandler = ->
+  window.hyp = hypotenuse window.innerWidth, window.innerHeight
+  renderer.setSize window.innerWidth, window.innerHeight
+
+window.addEventListener 'resize', resizeHandler, false
+
+skybox = new THREE.Mesh(
+                        new THREE.BoxGeometry(window.hyp,window.hyp,window.hyp, 20, 20,20),
+                        new THREE.MeshBasicMaterial(
+                            color:0xffffff
+#                             transparent: true
+#                             opacity: 0.2
+                            wireframe: true
+                            )
+                       )
+scene.add skybox
+console.dir skybox
+do animloop = ->
+  animloop.id = requestAnimationFrame animloop
+  t = (Date.now() - start)/1000
+  skybox.rotation.x = t/5
+  skybox.rotation.y = t/10
+  renderer.render scene, camera
+  return</script>
+</body></html>

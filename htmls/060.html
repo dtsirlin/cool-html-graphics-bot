@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/moteco.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <title>JS Bin</title>
+<style id="jsbin-css">
+body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  
+}
+canvas {
+  position: fixed;
+  background: black;  
+}
+video {
+  position:absolute;
+  display: none;
+}
+</style>
+</head>
+<body>
+  <video></video>  
+  <canvas width="808" height="857"></canvas>
+<script id="jsbin-javascript">
+var PI, animloop, canvas, ctx, sin, start, t;
+
+canvas = document.querySelectorAll("canvas")[0];
+
+ctx = canvas.getContext('2d');
+
+console.log(ctx);
+
+(canvas.resizeHandler = function() {
+  canvas.width = window.innerWidth;
+  return canvas.height = window.innerHeight;
+})();
+
+window.addEventListener('resize', canvas.resizeHandler, false);
+
+PI = Math.PI;
+
+sin = function(a) {
+  return Math.sin(a);
+};
+
+start = Date.now();
+
+t = 0;
+
+animloop = function() {
+  var maxout, side, x, xp, y, yp, _i, _j, _k, _l, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+  animloop.id = requestAnimationFrame(animloop);
+  t = (Date.now() - start) / 1000;
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  side = 88;
+  ctx.strokeStyle = "white";
+  maxout = -4;
+  for (x = _i = _ref = side * maxout, _ref1 = canvas.width - side * maxout; side > 0 ? _i < _ref1 : _i > _ref1; x = _i += side) {
+    for (y = _j = _ref2 = side * maxout, _ref3 = canvas.height - side * maxout; side > 0 ? _j < _ref3 : _j > _ref3; y = _j += side) {
+      xp = x + (sin(t / 2 + x + y) + 1) * side + 0.5;
+      yp = y + sin(t / 15 + x) * side * 1.5 + 0.5;
+      ctx.strokeRect(xp, yp, side / sin(t / 3 + x) * 100, side);
+    }
+  }
+  ctx.fillStyle = 'black';
+  for (x = _k = -side, _ref4 = canvas.width; side > 0 ? _k < _ref4 : _k > _ref4; x = _k += side) {
+    for (y = _l = -side, _ref5 = canvas.height; side > 0 ? _l < _ref5 : _l > _ref5; y = _l += side) {
+      xp = x + (sin(t / 2 + x + y) + 1) * side + 0.5;
+      yp = y + sin(t / 15 + x) * side * 2 + 0.5;
+      ctx.fillRect(xp, yp, 1.5, side * -10);
+    }
+  }
+};
+
+animloop();
+
+</script>
+
+<script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <title>JS Bin</title>
+</head>
+<body>
+  <video></video>  
+  <canvas></canvas>
+</body>
+</html></script>
+
+<script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  
+}
+canvas {
+  position: fixed;
+  background: black;  
+}
+video {
+  position:absolute;
+  display: none;
+}</script>
+
+<script id="jsbin-source-javascript" type="text/javascript">var PI, animloop, canvas, ctx, sin, start, t;
+
+canvas = document.querySelectorAll("canvas")[0];
+
+ctx = canvas.getContext('2d');
+
+console.log(ctx);
+
+(canvas.resizeHandler = function() {
+  canvas.width = window.innerWidth;
+  return canvas.height = window.innerHeight;
+})();
+
+window.addEventListener('resize', canvas.resizeHandler, false);
+
+PI = Math.PI;
+
+sin = function(a) {
+  return Math.sin(a);
+};
+
+start = Date.now();
+
+t = 0;
+
+animloop = function() {
+  var maxout, side, x, xp, y, yp, _i, _j, _k, _l, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+  animloop.id = requestAnimationFrame(animloop);
+  t = (Date.now() - start) / 1000;
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  side = 88;
+  ctx.strokeStyle = "white";
+  maxout = -4;
+  for (x = _i = _ref = side * maxout, _ref1 = canvas.width - side * maxout; side > 0 ? _i < _ref1 : _i > _ref1; x = _i += side) {
+    for (y = _j = _ref2 = side * maxout, _ref3 = canvas.height - side * maxout; side > 0 ? _j < _ref3 : _j > _ref3; y = _j += side) {
+      xp = x + (sin(t / 2 + x + y) + 1) * side + 0.5;
+      yp = y + sin(t / 15 + x) * side * 1.5 + 0.5;
+      ctx.strokeRect(xp, yp, side / sin(t / 3 + x) * 100, side);
+    }
+  }
+  ctx.fillStyle = 'black';
+  for (x = _k = -side, _ref4 = canvas.width; side > 0 ? _k < _ref4 : _k > _ref4; x = _k += side) {
+    for (y = _l = -side, _ref5 = canvas.height; side > 0 ? _l < _ref5 : _l > _ref5; y = _l += side) {
+      xp = x + (sin(t / 2 + x + y) + 1) * side + 0.5;
+      yp = y + sin(t / 15 + x) * side * 2 + 0.5;
+      ctx.fillRect(xp, yp, 1.5, side * -10);
+    }
+  }
+};
+
+animloop();
+</script>
+</body></html>

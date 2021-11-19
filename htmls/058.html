@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/pamaqa.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>JS Bin</title>
+<style id="jsbin-css">
+body, canvas{
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+canvas {
+  position: fixed;
+  background-color: black;
+  cursor: none;
+}
+</style>
+</head>
+<body>
+  <canvas width="808" height="857" style="zoom: 1;"></canvas>
+<script id="jsbin-javascript">
+(function() {
+  var Droplet, PI, animloop, canvas, cos, ctx, decay, droplets, frames, i, imageSmoothing, rainbow, random_seed, random_seed2, sin, sizeCanvasesToWindow, x, y, _i;
+
+  canvas = document.querySelectorAll('canvas')[0];
+
+  ctx = canvas.getContext('2d');
+
+  sizeCanvasesToWindow = function(event, zoom) {
+    var canvasCopy, contextCopy, d, e, g, height, oh, ow, w, width;
+    if (zoom == null) {
+      zoom = 1;
+    }
+    w = window;
+    d = document;
+    e = d.documentElement;
+    g = d.getElementsByTagName('body')[0];
+    width = w.innerWidth || e.clientWidth || g.clientWidth;
+    height = w.innerHeight || e.clientHeight || g.clientHeight;
+    ow = canvas.width;
+    oh = canvas.height;
+    canvasCopy = document.createElement('canvas');
+    contextCopy = canvasCopy.getContext('2d');
+    canvasCopy.width = ow;
+    canvasCopy.height = oh;
+    contextCopy.drawImage(canvas, 0, 0);
+    canvas.width = width / zoom;
+    canvas.height = height / zoom;
+    ctx.drawImage(canvasCopy, 0, 0, width / zoom, height / zoom);
+    canvas.style.zoom = zoom;
+    canvas.style.MozTransformOrigin = "0 0";
+    return canvas.style.MozTransform = "scale(" + zoom + ", " + zoom + ")";
+  };
+
+  sizeCanvasesToWindow(null, 1);
+
+  window.addEventListener('resize', sizeCanvasesToWindow, false);
+
+  window.addEventListener('onorientationchange', sizeCanvasesToWindow, false);
+
+  frames = 0;
+
+  PI = Math.PI;
+
+  sin = function(angle) {
+    return Math.sin(angle);
+  };
+
+  cos = function(angle) {
+    return Math.cos(angle);
+  };
+
+  imageSmoothing = function(context, a) {
+    if (context == null) {
+      context = ctx;
+    }
+    if (a == null) {
+      a = false;
+    }
+    context.webkitImageSmoothingEnabled = a;
+    context.mozImageSmoothingEnabled = a;
+    return context.imageSmoothingEnabled = a;
+  };
+
+  rainbow = function(angle, alpha, offset) {
+    var a, b, g, r;
+    if (angle == null) {
+      angle = 1;
+    }
+    if (alpha == null) {
+      alpha = 1;
+    }
+    if (offset == null) {
+      offset = 1;
+    }
+    r = 128 + 127 * sin(angle + 0 * PI / 3 * offset);
+    g = 128 + 127 * sin(angle + 2 * PI / 3 * offset);
+    b = 128 + 127 * sin(angle + 4 * PI / 3 * offset);
+    a = alpha;
+    return "rgba(" + (r | 0) + "," + (g | 0) + "," + (b | 0) + "," + a + ")";
+  };
+
+  decay = function(h, v, s, r) {
+    var dh, dw, dx, dy;
+    ctx.save();
+    ctx.translate(canvas.width / 2 + h, canvas.height / 2 + v);
+    if (r !== 0) {
+      ctx.rotate(r);
+    }
+    dx = -(canvas.width + s) / 2;
+    dy = -(canvas.height + s) / 2;
+    dw = canvas.width + s;
+    dh = canvas.height + s;
+    ctx.drawImage(canvas, dx, dy, dw, dh);
+    return ctx.restore();
+  };
+
+  random_seed = (Math.random() - 0.5) * 2 * PI;
+
+  random_seed2 = Math.random() - 0.5;
+
+  Droplet = (function() {
+    function Droplet(seed, x, y) {
+      this.seed = seed;
+      this.x = x;
+      this.y = y;
+    }
+
+    Droplet.prototype.radius = Math.random() * 30;
+
+    Droplet.prototype.draw = function() {
+      ctx.fillStyle = rainbow(this.seed * PI + PI / 2, 0.09, 0.7);
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, PI * 2, false);
+      ctx.closePath();
+      return ctx.fill();
+    };
+
+    Droplet.prototype.grow = function() {
+      this.radius -= this.seed / 3;
+      this.y += this.seed;
+      if (this.radius <= 0) {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height / 7 * 6;
+        this.seed = Math.random();
+        return this.radius = Math.random() * 30;
+      }
+    };
+
+    return Droplet;
+
+  })();
+
+  droplets = [];
+
+  for (i = _i = 0; _i < 80; i = ++_i) {
+    x = Math.random() * canvas.width;
+    y = Math.random() * canvas.height;
+    droplets.push(new Droplet(Math.random(), x, y));
+  }
+
+  console.dir(droplets);
+
+  (animloop = function() {
+    var animloop_id, _j, _ref;
+    animloop_id = requestAnimationFrame(animloop);
+    frames += 1;
+    for (i = _j = 0, _ref = droplets.length; 0 <= _ref ? _j < _ref : _j > _ref; i = 0 <= _ref ? ++_j : --_j) {
+      droplets[i].grow();
+      droplets[i].draw();
+    }
+    decay(0, 0.2, 0.1, frames / 1000000);
+    return decay(0, 0, -0.1, -frames / 1000000);
+  })();
+
+}).call(this);
+
+</script>
+
+<script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>JS Bin</title>
+</head>
+<body>
+  <canvas></canvas>
+</body>
+</html></script>
+
+<script id="jsbin-source-css" type="text/css">body, canvas{
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+canvas {
+  position: fixed;
+  background-color: black;
+  cursor: none;
+}</script>
+
+<script id="jsbin-source-javascript" type="text/coffeescript">
+canvas = document.querySelectorAll('canvas')[0]
+ctx = canvas.getContext '2d'
+
+sizeCanvasesToWindow = (event, zoom = 1) ->
+  w = window
+  d = document
+  e = d.documentElement
+  g =  d.getElementsByTagName('body')[0]
+  width = w.innerWidth or e.clientWidth or g.clientWidth
+  height = w.innerHeight or e.clientHeight or g.clientHeight
+
+  ow = canvas.width
+  oh = canvas.height
+
+  canvasCopy = document.createElement 'canvas'
+  contextCopy = canvasCopy.getContext '2d'
+  canvasCopy.width = ow
+  canvasCopy.height = oh
+
+  contextCopy.drawImage canvas, 0, 0
+
+  canvas.width = width/zoom
+  canvas.height = height/zoom
+  ctx.drawImage canvasCopy, 0, 0, width/zoom, height/zoom
+  canvas.style.zoom = zoom
+  canvas.style.MozTransformOrigin = "0 0"
+  canvas.style.MozTransform = "scale(#{zoom}, #{zoom})"
+
+sizeCanvasesToWindow null, 1
+
+window.addEventListener 'resize', sizeCanvasesToWindow, false
+window.addEventListener 'onorientationchange', sizeCanvasesToWindow, false
+
+frames = 0
+
+PI = Math.PI
+
+sin = (angle) -> Math.sin(angle)
+cos = (angle) -> Math.cos(angle)
+
+imageSmoothing = (context = ctx, a = false) ->
+  context.webkitImageSmoothingEnabled = a
+  context.mozImageSmoothingEnabled    = a
+  context.imageSmoothingEnabled       = a
+
+rainbow = (angle = 1, alpha = 1, offset =  1) ->
+  r = 128 + 127 * sin angle + 0*PI/3*offset
+  g = 128 + 127 * sin angle + 2*PI/3*offset
+  b = 128 + 127 * sin angle + 4*PI/3*offset
+  a = alpha
+  "rgba(#{r|0},#{g|0},#{b|0},#{a})"
+
+decay = (h, v, s, r) ->
+  ctx.save()
+  ctx.translate canvas.width / 2 + h, canvas.height / 2 +  v
+  ctx.rotate r if r isnt 0
+  dx = -(canvas.width + s)/2
+  dy = -(canvas.height + s)/2
+  dw = canvas.width + s
+  dh = canvas.height + s
+  ctx.drawImage canvas, dx, dy, dw, dh
+  ctx.restore()
+
+random_seed = (Math.random() - 0.5) * 2 * PI
+random_seed2 = (Math.random() - 0.5)
+
+class Droplet
+  constructor: (@seed, @x, @y) ->
+  radius: Math.random()*30
+  draw: ->
+    ctx.fillStyle = rainbow @seed*PI + PI/2, 0.09, 0.7
+    ctx.beginPath()
+    ctx.arc @x, @y, @radius, 0, PI*2, false
+    ctx.closePath()
+    ctx.fill()
+  grow: ->
+    @radius-= @seed/3
+    @y+= @seed
+    if @radius <= 0
+      @x = Math.random()*canvas.width
+      @y =  Math.random()*canvas.height/7*6
+      @seed = Math.random()
+      @radius = Math.random()*30
+
+droplets = []
+
+for i in [0 ... 80]
+  x = Math.random()*canvas.width
+  y = Math.random()*canvas.height
+  droplets.push new Droplet Math.random(), x, y
+console.dir droplets
+
+do animloop = ->
+  animloop_id = requestAnimationFrame animloop
+
+  frames += 1
+
+  for i in [0 ... droplets.length]
+    droplets[i].grow()
+    droplets[i].draw()
+    
+  decay 0, 0.2, 0.1, frames/1000000
+  decay 0, 0, -0.1, -frames/1000000
+
+
+
+
+
+</script>
+</body></html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/fexuyo.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="./054_files/three.min.js"></script>
+  
+  <title>geyofe</title>
+  <style id="jsbin-css">
+    body, canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+canvas {
+  position: fixed;
+}
+</style>
+</head>
+
+<body>
+  <canvas width="1616" height="857"></canvas>
+  <script id="jsbin-javascript">
+    var PI, animloop, camera, canvas, ctx, cubes, frame, geometry, material, renderer, resizeHandler, scene, sin, start, t, x, y, _i, _j;
+// var self;
+t = 0;
+
+start = Date.now();
+
+frame = 0;
+
+PI = Math.PI;
+
+sin = function(a) {
+  return Math.sin(a);
+};
+
+scene = new THREE.Scene();
+
+camera = new THREE.PerspectiveCamera(37.8, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+renderer = new THREE.WebGLRenderer();
+
+// canvas = document.createElement('canvas');
+canvas = document.querySelectorAll("canvas")[0];
+ctx = canvas.getContext('2d');
+
+(resizeHandler = function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  canvas.width = window.innerWidth;
+  return canvas.height = window.innerHeight;
+})();
+
+geometry = new THREE.BoxGeometry(1, 1, 1);
+
+material = new THREE.MeshBasicMaterial({
+  wireframe: true
+});
+
+cubes = [];
+
+for (x = _i = -15; _i <= 15; x = _i += 2.5) {
+  for (y = _j = -15; _j <= 15; y = _j += 2.5) {
+    cubes.push(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+      wireframe: true
+    })));
+    cubes[cubes.length - 1].position.x = x;
+    cubes[cubes.length - 1].position.y = y;
+    scene.add(cubes[cubes.length - 1]);
+  }
+}
+
+camera.position.z = 55;
+
+(render = function() {
+  var a, b, c, g, i, r, _k, _ref;
+  render.id = requestAnimationFrame(render);
+  t = (Date.now() - start) / 1000;
+  frame++;
+  for (i = _k = 0, _ref = cubes.length; 0 <= _ref ? _k < _ref : _k > _ref; i = 0 <= _ref ? ++_k : --_k) {
+    c = cubes[i];
+    cubes[i].rotation.z = Math.sqrt(Math.abs(c.position.x * c.position.y)) / 30 * PI;
+    cubes[i].rotation.z -= t / 5 + sin(c.position.y / 30 * PI + sin(t / 11 + c.position.x / 30 * PI) * PI);
+    cubes[i].scale.x = cubes[i].scale.y = 1.25 + 0.125 * sin(-cubes[i].rotation.z * 4 + PI / 2);
+    cubes[i].scale.z = cubes[i].scale.x * 3.25;
+    cubes[i].rotation.x = PI / 2;
+    cubes[i].rotation.y = -PI / 3 * sin(cubes[i].rotation.z);
+    a = cubes[i].rotation.z;
+    r = sin(a + 0) * 0.5 + 0.5;
+    g = sin(a + PI / 4) * 0.5 + 0.5;
+    b = sin(a + PI / 2) * 0.5 + 0.5;
+    cubes[i].material.color = new THREE.Color(r, g, b);
+  }
+  renderer.render(scene, camera);
+  return ctx.drawImage(renderer.domElement,0,0,canvas.width,canvas.height);
+})();
+
+window.addEventListener('resize', resizeHandler, false);
+
+self.animate = function() {
+  self.animate.id = requestAnimationFrame(self.animate);
+  render();
+};
+
+self.run = function() {
+//   resizeHandler();
+//   self.animate();
+};
+
+window.onload = self.run;
+// render();
+</script>
+  <script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"><\/script>
+  <meta charset="utf-8">
+  <title>geyofe</title>
+</head>
+<body>
+  <canvas></canvas>
+</body>
+</html></script>
+  <script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+canvas {
+  position: fixed;
+}</script>
+  <script id="jsbin-source-javascript" type="text/javascript">
+  var PI, animloop, camera, canvas, ctx, cubes, frame, geometry, material, renderer, resizeHandler, scene, sin, start, t, x, y, _i, _j;
+  // var self;
+  t = 0;
+
+  start = Date.now();
+
+  frame = 0;
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(37.8, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  renderer = new THREE.WebGLRenderer();
+
+  // canvas = document.createElement('canvas');
+  canvas = document.querySelectorAll("canvas")[0];
+  ctx = canvas.getContext('2d');
+
+  (resizeHandler = function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    canvas.width = window.innerWidth;
+    return canvas.height = window.innerHeight;
+  })();
+
+  geometry = new THREE.BoxGeometry(1, 1, 1);
+
+  material = new THREE.MeshBasicMaterial({
+    wireframe: true
+  });
+
+  cubes = [];
+
+  for (x = _i = -15; _i <= 15; x = _i += 2.5) {
+    for (y = _j = -15; _j <= 15; y = _j += 2.5) {
+      cubes.push(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+        wireframe: true
+      })));
+      cubes[cubes.length - 1].position.x = x;
+      cubes[cubes.length - 1].position.y = y;
+      scene.add(cubes[cubes.length - 1]);
+    }
+  }
+
+  camera.position.z = 55;
+
+  (render = function() {
+    var a, b, c, g, i, r, _k, _ref;
+    render.id = requestAnimationFrame(render);
+    t = (Date.now() - start) / 1000;
+    frame++;
+    for (i = _k = 0, _ref = cubes.length; 0 <= _ref ? _k < _ref : _k > _ref; i = 0 <= _ref ? ++_k : --_k) {
+      c = cubes[i];
+      cubes[i].rotation.z = Math.sqrt(Math.abs(c.position.x * c.position.y)) / 30 * PI;
+      cubes[i].rotation.z -= t / 5 + sin(c.position.y / 30 * PI + sin(t / 11 + c.position.x / 30 * PI) * PI);
+      cubes[i].scale.x = cubes[i].scale.y = 1.25 + 0.125 * sin(-cubes[i].rotation.z * 4 + PI / 2);
+      cubes[i].scale.z = cubes[i].scale.x * 3.25;
+      cubes[i].rotation.x = PI / 2;
+      cubes[i].rotation.y = -PI / 3 * sin(cubes[i].rotation.z);
+      a = cubes[i].rotation.z;
+      r = sin(a + 0) * 0.5 + 0.5;
+      g = sin(a + PI / 4) * 0.5 + 0.5;
+      b = sin(a + PI / 2) * 0.5 + 0.5;
+      cubes[i].material.color = new THREE.Color(r, g, b);
+    }
+    renderer.render(scene, camera);
+    return ctx.drawImage(renderer.domElement, 0, 0, canvas.width, canvas.height);
+  })();
+
+  window.addEventListener('resize', resizeHandler, false);
+
+  self.animate = function() {
+    self.animate.id = requestAnimationFrame(self.animate);
+    render();
+  };
+
+  self.run = function() {
+    //   resizeHandler();
+    //   self.animate();
+  };
+
+  window.onload = self.run;
+  // render();
+  </script>
+
+
+</body></html>

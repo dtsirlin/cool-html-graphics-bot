@@ -1,0 +1,12 @@
+body, canvas, audio {
+	margin: 0;
+	padding: 0;
+	border: 0;
+  background-color: #00ffff;
+  background-image: -webkit-linear-gradient(top, #00ffff, #ff00ff);
+  background-image:         linear-gradient(to bottom, #00ffff, #ff00ff);
+}
+canvas {
+	position: fixed;
+	cursor: none;
+}

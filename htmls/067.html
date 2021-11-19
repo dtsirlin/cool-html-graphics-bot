@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!-- saved from url=(0021)https://csh.bz/quays/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>quays</title>
+	<link rel="stylesheet" type="text/css" href="./067_files/style.css">
+</head>
+<body>
+	<canvas id="canvas" width="808" height="857">This page requires javascript</canvas>
+
+	<script src="./067_files/sdk.js"></script>
+	<script type="text/javascript">
+window.beat = 1
+SC.initialize({
+	client_id: "110c86d9bdeed10bcfcb84960392ea2d"
+})
+SC.get('/resolve',{
+	url: "https://soundcloud.com/qqqqquays/quays-tres",
+},
+	function(tracks){
+		window.song = tracks;
+		console.dir(song);
+		SC.stream(
+			song.stream_url,
+			{
+				preferFlash:true,
+				flashVersion: 9,
+				autoPlay: true,
+				usePeakData: true,
+				useHighPerformance: true,
+				whileplaying: function(){
+					window.beat = (this.peakData.left + this.peakData.right)/2
+				}
+			},
+			function(tracks){
+				console.log(tracks);
+				// song.play()
+			}	
+		)
+})
+
+	</script>
+	<script type="text/javascript" src="./067_files/quays.js"></script>
+</body></html>

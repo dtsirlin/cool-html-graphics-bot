@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/geyofe.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="./056_files/three.min.js"></script>
+  
+  <title>geyofe</title>
+  <style id="jsbin-css">
+    body, canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+canvas {
+  position: fixed;
+}
+</style>
+</head>
+
+<body>
+  <script id="jsbin-javascript">
+    (function() {
+  var PI, abs, animloop, camera, canvas, cos, ctx, cubes, frame, geometry, material, renderer, resizeHandler, scene, side, sin, start, t, x, y, z, _i, _j, _k;
+
+  t = 0;
+
+  start = Date.now();
+
+  frame = 0;
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  cos = function(a) {
+    return Math.cos(a);
+  };
+
+  abs = function(a) {
+    return Math.abs(a);
+  };
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(37.8, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  renderer = new THREE.WebGLRenderer();
+
+  canvas = document.createElement('canvas');
+
+  ctx = canvas.getContext('2d');
+
+  (resizeHandler = function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    canvas.width = window.innerWidth;
+    return canvas.height = window.innerHeight;
+  })();
+
+  window.addEventListener('resize', resizeHandler, false);
+
+  document.body.appendChild(renderer.domElement);
+
+  geometry = new THREE.BoxGeometry(1, 1, 1);
+
+  material = new THREE.MeshBasicMaterial({});
+
+  cubes = [];
+
+  side = 5;
+
+  for (x = _i = -side; _i <= side; x = _i += 1) {
+    for (y = _j = -side; _j <= side; y = _j += 1) {
+      for (z = _k = 0; _k <= side; z = _k += 5) {
+        cubes.push(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+          color: 0x00ffff,
+          transparent: true,
+          wireframe: false,
+          opacity: 0.3
+        })));
+        cubes[cubes.length - 1].position.x = x * 2;
+        cubes[cubes.length - 1].position.y = y * 2;
+        cubes[cubes.length - 1].position.z = z * 9 - abs(x * side) - abs(y * side);
+        scene.add(cubes[cubes.length - 1]);
+      }
+    }
+  }
+
+  camera.position.z = 55;
+
+  animloop = function() {
+    var a, b, c, g, i, r, _l, _ref;
+    animloop.id = requestAnimationFrame(animloop);
+    t = (Date.now() - start) / 1000;
+    frame++;
+    camera.rotation.z = PI / 4;
+    for (i = _l = 0, _ref = cubes.length; 0 <= _ref ? _l < _ref : _l > _ref; i = 0 <= _ref ? ++_l : --_l) {
+      c = cubes[i];
+      cubes[i].scale.x = cubes[i].scale.y = z / side * (sin(t / 1 + c.position.z) * 0.5 + 0.5);
+      cubes[i].rotation.y += 0.0003;
+      cubes[i].rotation.x += 0.0005;
+      cubes[i].rotation.z += 0.0007;
+      a = c.position.z / side / 5 + t / 4 + cubes[i].scale.x;
+      r = sin(a) * 0.5 + 0.5;
+      g = sin(a + 2) * 0.5 + 0.5;
+      b = sin(a + 4) * 0.5 + 0.5;
+      cubes[i].material.color = new THREE.Color(r, g, b);
+    }
+    return renderer.render(scene, camera);
+  };
+
+  animloop();
+
+  console.dir(cubes[0]);
+
+}).call(this);
+
+</script><canvas width="3232" height="1714" style="width: 1616px; height: 857px;"></canvas>
+  <script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+<script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"><\/script>
+  <meta charset="utf-8">
+  <title>geyofe</title>
+</head>
+<body>
+
+</body>
+</html></script>
+  <script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+canvas {
+  position: fixed;
+}</script>
+  <script id="jsbin-source-javascript" type="text/coffeescript">t = 0
+start = Date.now()
+frame = 0
+PI = Math.PI
+sin = (a) -> Math.sin(a)
+cos = (a) -> Math.cos(a)
+abs = (a) -> Math.abs(a)
+scene = new THREE.Scene()
+camera = new THREE.PerspectiveCamera 37.8, window.innerWidth/window.innerHeight, 0.1, 1000
+renderer = new THREE.WebGLRenderer()
+canvas = document.createElement 'canvas'
+ctx = canvas.getContext '2d'
+do resizeHandler = ->
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
+  renderer.setSize window.innerWidth, window.innerHeight
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+window.addEventListener 'resize', resizeHandler, false
+document.body.appendChild renderer.domElement
+geometry = new THREE.BoxGeometry 1, 1, 1
+material = new THREE.MeshBasicMaterial {
+#   color: 0x00ffff
+#   wireframe: true
+}
+cubes = []
+side = 5
+for x in [-side .. side]  by 1# by 2.5#1.5
+  for y in [-side .. side] by 1# by 2.5#1.5
+    for z in [0 .. side] by 5
+      cubes.push new THREE.Mesh geometry, new THREE.MeshBasicMaterial(color: 0x00ffff, transparent: true, wireframe: false, opacity: 0.3)
+      cubes[cubes.length-1].position.x = x*2
+      cubes[cubes.length-1].position.y = y*2
+      cubes[cubes.length-1].position.z = z*9 - abs(x*side) - abs(y*side)
+      scene.add cubes[cubes.length-1]
+
+camera.position.z = 55
+
+animloop = ->
+  animloop.id = requestAnimationFrame animloop
+  t = (Date.now() - start)/1000
+  frame++
+#   camera.rotation.z-= 0.0005
+  camera.rotation.z = PI/4
+  for i in [0 ... cubes.length]
+    c = cubes[i]
+    cubes[i].scale.x = cubes[i].scale.y = z/side * (sin(t/1+c.position.z)*0.5+0.5)
+    cubes[i].rotation.y += 0.0003
+    cubes[i].rotation.x += 0.0005
+    cubes[i].rotation.z += 0.0007
+    a = c.position.z/side/5+t/4 + cubes[i].scale.x
+    r = sin(a)*0.5+0.5
+    g = sin(a+2)*0.5+0.5
+    b = sin(a+4)*0.5+0.5
+    cubes[i].material.color = new THREE.Color(r, g, b)
+#     return
+  renderer.render scene, camera
+
+animloop()
+console.dir(cubes[0])</script>
+
+
+</body></html>
