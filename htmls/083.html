@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/cevuqu.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="./083_files/three.min.js"></script>
+  
+  <title>03</title>
+  <style id="jsbin-css">
+    html, body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+canvas {
+  height: 100%;
+  width: 100%;
+  position:fixed;
+}
+</style>
+</head>
+
+<body>
+  <script id="jsbin-javascript">
+    (function() {
+  var PI, camera, cos, cube, geometry, material, render, renderer, resizeHandler, scene, sin, start, t, tcanvas, tctx, texture;
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+
+  renderer = new THREE.WebGLRenderer();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  document.body.appendChild(renderer.domElement);
+
+  (resizeHandler = function() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    console.log(camera);
+    camera.updateProjectionMatrix();
+    return renderer.setSize(window.innerWidth, window.innerHeight);
+  })();
+
+  window.addEventListener('resize', resizeHandler, false);
+
+  tcanvas = document.createElement('canvas');
+
+  tcanvas.width = 800;
+
+  tcanvas.height = 800;
+
+  tctx = tcanvas.getContext('2d');
+
+  tctx.imageSmoothingEnabled = false;
+
+  texture = new THREE.Texture(tcanvas);
+
+  texture.needsUpdate = true;
+
+  texture.wrapS = THREE.RepeatWrapping;
+
+  texture.wrapT = THREE.RepeatWrapping;
+
+  texture.generateMipmaps = false;
+
+  texture.minFilter = THREE.NearestFilter;
+
+  texture.magFilter = THREE.NearestFilter;
+
+  texture.repeat.set(1, 1);
+
+  geometry = new THREE.PlaneGeometry(10, 10, 24, 24);
+
+  material = new THREE.MeshBasicMaterial({
+    map: texture,
+    wireframe: false,
+    ztransparent: true,
+    side: THREE.DoubleSide,
+    zblending: THREE.AdditiveBlending
+  });
+
+  cube = new THREE.Mesh(geometry, material);
+
+  scene.add(cube);
+
+  camera.position.z = 6;
+
+  console.dir(cube);
+
+  start = Date.now();
+
+  t = 0;
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  cos = function(a) {
+    return Math.cos(a);
+  };
+
+  render = function() {
+    var i, p, rotation, side, sside, x, y, _i, _j, _k, _ref, _ref1, _ref2, _ref3, _ref4;
+    requestAnimationFrame(render);
+    t = (Date.now() - start) / 1000;
+    tctx.clearRect(0, 0, tcanvas.width, tcanvas.height);
+    side = 25;
+    tctx.lineWidth = side / 2.5;
+    tctx.strokeStyle = 'white';
+    tctx.fillStyle = 'white';
+    for (x = _i = -side, _ref = tcanvas.width + side, _ref1 = side * 1.5; _ref1 > 0 ? _i < _ref : _i > _ref; x = _i += _ref1) {
+      for (y = _j = -side, _ref2 = tcanvas.height + side, _ref3 = side * 1.5; _ref3 > 0 ? _j < _ref2 : _j > _ref2; y = _j += _ref3) {
+        side = 25;
+        tctx.save();
+        tctx.translate(x, y);
+        rotation = x / tcanvas.width * PI + y / tcanvas.height * PI + t / 10;
+        tctx.rotate(rotation);
+        sside = (1.25 + 0.125 * sin(-rotation * 4 + PI / 2)) * 26;
+        tctx.fillRect(-sside / 2, -sside / 2, sside, sside);
+        tctx.restore();
+      }
+    }
+    for (i = _k = 0, _ref4 = cube.geometry.vertices.length; 0 <= _ref4 ? _k < _ref4 : _k > _ref4; i = 0 <= _ref4 ? ++_k : --_k) {
+      p = cube.geometry.vertices[i];
+      cube.geometry.vertices[i].z = sin(p.x / 10 * PI * sin(t / 3) * 15 + t + p.y / 10 * PI * cos(t / 3) * 15) / 10 + sin(t + cos(p.x) * sin(p.y) * PI + p.x / PI) / 4;
+      cube.geometry.vertices[i].z += sin(p.x / 10 * PI * sin(-t / 3) * 15 - t / 8 + p.y / 10 * PI * cos(-t / 3) * 15) / 10 - sin(-t / 8 + cos(p.x) * sin(p.y) * PI + p.x / PI) / 4;
+      cube.geometry.vertices[i].z *= sin(p.x / 10 * PI + PI / 2) * sin(p.y / 10 * PI + PI / 2) / 5;
+    }
+    texture.needsUpdate = true;
+    cube.geometry.verticesNeedUpdate = true;
+    renderer.render(scene, camera);
+    cube.position.z = 2.5;
+    cube.rotation.x = -0.5;
+    return cube.rotation.z = 0.75;
+  };
+
+  render();
+
+}).call(this);
+
+</script><canvas width="1280" height="1247" style="width: 1280px; height: 1247px;"></canvas>
+  <script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+<script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"><\/script>
+  <meta charset="utf-8">
+  <title>03</title>
+</head>
+<body>
+
+</body>
+</html></script>
+  <script id="jsbin-source-css" type="text/css">html, body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+canvas {
+  height: 100%;
+  width: 100%;
+  position:fixed;
+}</script>
+  <script id="jsbin-source-javascript" type="text/coffeescript"># console.clear()
+# console.dir THREE
+
+scene = new THREE.Scene()
+camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000)
+# camera = new THREE.OrthographicCamera -0.5, 0.5, -1/2, 1, 1, 1000
+#console.dir camera
+renderer = new THREE.WebGLRenderer()
+# console.dir camera
+renderer.setSize window.innerWidth, window.innerHeight
+document.body.appendChild renderer.domElement
+do resizeHandler = ->
+  camera.aspect = window.innerWidth / window.innerHeight
+#   camera.fov = 37.8 
+  console.log camera
+  camera.updateProjectionMatrix()
+  renderer.setSize window.innerWidth, window.innerHeight
+#   canvas.width = window.innerWidth
+#   canvas.height = window.innerHeight
+window.addEventListener 'resize', resizeHandler, false
+tcanvas = document.createElement 'canvas'
+tcanvas.width = 800
+tcanvas.height = 800
+tctx = tcanvas.getContext '2d'
+tctx.imageSmoothingEnabled = false
+
+texture = new THREE.Texture tcanvas
+texture.needsUpdate = true
+texture.wrapS = THREE.RepeatWrapping
+texture.wrapT = THREE.RepeatWrapping
+texture.generateMipmaps = false
+texture.minFilter = THREE.NearestFilter
+texture.magFilter = THREE.NearestFilter
+texture.repeat.set 1, 1
+
+# console.dir texture
+#geometry = new THREE.TorusGeometry 3, 2.99, 16, 100
+#geometry = new THREE.BoxGeometry 1, 1, 1
+geometry = new THREE.PlaneGeometry 10, 10, 24, 24
+
+# console.dir geometry
+material = new THREE.MeshBasicMaterial {
+  map:texture,
+  wireframe:false,
+  ztransparent: true,
+  side: THREE.DoubleSide,
+  zblending: THREE.AdditiveBlending}
+cube = new THREE.Mesh geometry, material
+scene.add cube
+camera.position.z = 6
+console.dir cube
+
+start = Date.now()
+t = 0
+PI = Math.PI
+sin = (a) -> Math.sin(a)
+cos = (a) -> Math.cos(a)
+render = ->
+  requestAnimationFrame render
+  t = (Date.now() - start)/1000
+  tctx.clearRect 0, 0, tcanvas.width, tcanvas.height
+  side = 25
+  tctx.lineWidth = side/2.5
+#   texture.repeat.set 2, 2 * (Date.now()/300%2)
+  tctx.strokeStyle = 'white'
+  tctx.fillStyle = 'white'
+  for x in [-side ... tcanvas.width+side] by side*1.5
+    for y in [-side ... tcanvas.height+side] by side*1.5
+      side = 25
+      tctx.save()
+      tctx.translate x, y
+      rotation = x/tcanvas.width*PI+y/tcanvas.height*PI+t/10
+      tctx.rotate rotation
+      sside = (1.25 + 0.125 * sin(-rotation * 4 + PI/2))*26
+      tctx.fillRect -sside/2, -sside/2, sside, sside
+      tctx.restore()
+
+  for i in [0 ... cube.geometry.vertices.length]
+    p = cube.geometry.vertices[i]
+    cube.geometry.vertices[i].z = sin(p.x/10*PI*sin(t/3)*15 + t + p.y/10*PI*cos(t/3)*15)/10 + sin(t + cos(p.x)*sin(p.y)*PI + p.x/PI)/4
+    cube.geometry.vertices[i].z+= sin(p.x/10*PI*sin(-t/3)*15 - t/8 + p.y/10*PI*cos(-t/3)*15)/10 - sin(-t/8 + cos(p.x)*sin(p.y)*PI + p.x/PI)/4
+    cube.geometry.vertices[i].z *= sin(p.x/10*PI + PI/2) * sin(p.y/10*PI + PI/2)/5
+  texture.needsUpdate = true
+  cube.geometry.verticesNeedUpdate = true
+  renderer.render scene, camera
+  cube.position.z = 2.5
+  cube.rotation.x = -0.5#-0.55
+  cube.rotation.z = 0.75
+#   cube.rotation.z+= 0.001
+#   cube.rotation.y += 0.01*Math.sin(Date.now()/4002)
+#   cube.rotation.z -= 0.01*Math.cos(Date.now()/3001)
+#   camera.setLens 7 + 3*Math.sin(Date.now()/300*Math.sin(Date.now()/5000000000000))
+#  camera.position.z = 0.1*Math.sin(Date.now()/1000) + 0.5
+
+render()</script>
+
+
+</body></html>

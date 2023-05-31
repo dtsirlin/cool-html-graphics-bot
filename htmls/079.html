@@ -1,0 +1,127 @@
+
+<!-- saved from url=(0036)https://csh.bz/canvas/canvas14d.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>canvas14d</title>
+<!-- chris shier, noisia@gmail.com, http://csh.bz -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<link rel="stylesheet" type="text/css" href="./079_files/reset.css">
+<link rel="icon" href="http://csh.bz/favicon.ico">
+<style type="text/css">
+</style>
+</head>
+<body>
+<canvas id="canvas" height="1247" width="1280">nocanvas</canvas>
+
+
+<script type="text/javascript">
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function(/* function */ callback, /* DOMElement */ element){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+var getWindowSize = function(){
+  var w=window,
+      d=document,
+      e=d.documentElement,
+      g=d.getElementsByTagName('body')[0];
+
+  cw = w.innerWidth||e.clientWidth||g.clientWidth;
+  ch = w.innerHeight||e.clientHeight||g.clientHeight;
+
+  cMin = Math.min(cw, ch);
+  cMax = Math.max(cw, ch);
+}
+getWindowSize();
+
+var sizeCanvas = function(w, h){
+  canvas = document.getElementById('canvas');
+  canvas.setAttribute("height", h);
+  canvas.setAttribute("width", w);
+}
+sizeCanvas(cw, ch);
+
+var sizeContext = function(w, h){
+  ctx = document.getElementById('canvas').getContext('2d');
+  ctx.translate(w/2,h/2);
+}
+sizeContext(cw, ch);
+
+// background
+ctx.fillStyle = "hsla(0,0%,50%,1)";
+ctx.fillRect(-cw/2, -ch/2, cMax, cMax);
+
+var x = 0,
+    y = 0,
+    z = 0;
+
+counter = function(){
+	x+=1;
+}
+
+var clearCanvas = function(){
+	ctx.fillStyle = "hsla(0,0%,000%,1.01)";
+	ctx.fillRect(-cMax, -cMax, cMax*2, cMax*2);
+}
+
+
+var spinner = function(r, s){
+  ctx.save();
+  ctx.rotate(0.01*x*r);
+  ctx.fillStyle = "hsla(" + 0 + ",100%,100%,0.1)";
+  ctx.fillRect( -s/2, -s/2, s, s );
+  ctx.restore();
+}
+
+var squareRoot = function(a, b){
+  return Math.sqrt( (a*a) + (b*b||a*a) )/2;
+}
+
+var nest = function(a,b){
+  for (var i = b; i > 0.1; i-=0.02) {
+    var a = squareRoot(a);
+    spinner(i, a);
+  };
+}
+
+function animloop(){
+  requestAnimFrame(animloop);
+  counter();
+  clearCanvas();
+  nest(cMax, 0.36);
+};
+animloop();
+
+function windowGotResized(){
+  //copy canvas
+  var canvasCopy = document.createElement("canvas"),
+      ow = cw,
+      oh = ch;
+  canvasCopy.setAttribute("width", ow);
+  canvasCopy.setAttribute("height", oh);
+  var contextCopy = canvasCopy.getContext('2d');
+  contextCopy.drawImage(canvas, 0, 0);
+
+  //resize canvas
+  getWindowSize();
+  sizeCanvas(cw, ch);
+
+  //paste copied canvas onto resized canvas
+  ctx.drawImage(canvasCopy, 0, 0, ow, oh, 0, 0, cw, ch);
+  sizeContext(cw, ch);
+}
+
+function reloadWindow(){window.location = window.location;}
+
+window.onresize = windowGotResized;
+
+</script>
+
+
+</body></html>

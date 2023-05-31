@@ -1,12 +1,11 @@
 
-<!-- saved from url=(0027)https://csh.bz/29/30y3.html -->
+<!-- saved from url=(0026)https://csh.bz/29/30g.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>30y</title>
+<title>30g</title>
 <!-- chris shier, noisia@gmail.com, http://csh.bz -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">  <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black"> <meta name="apple-touch-fullscreen" content="yes">
-<link rel="stylesheet" type="text/css" href="./063_files/reset.css">
+<link rel="stylesheet" type="text/css" href="./012_files/reset.css">
 <link rel="icon" href="http://csh.bz/favicon.ico">
-<link rel="image_src" href="https://csh.bz/30u.png">
 <style type="text/css">
 </style>
 
@@ -15,7 +14,7 @@
 <canvas id="canvas" height="1247" width="1280">try this in a browser that supports the canvas tag</canvas>
 
 
-<script type="text/javascript" async="" src="./063_files/ga.js"></script><script type="text/javascript" src="./063_files/window.js"></script>
+<script type="text/javascript" async="" src="./012_files/ga.js"></script><script type="text/javascript" src="./012_files/window.js"></script>
 
 <script type="text/javascript">
 
@@ -95,12 +94,8 @@ Mouse.events.down = function(e){
 };
 
 var time = 0;
-Mouse.timer = 0;
 function timer(){
   time += 1;
-  if (Mouse.down === true){
-    Mouse.timer += 1;
-  }
 };
 
 function clearCanvas(alpha){
@@ -109,42 +104,54 @@ function clearCanvas(alpha){
 };
 clearCanvas(1);
 
-function sin(x, max){
-  return (Math.sin(x)+1) * (max/2 || 1);
-}
-
-function square(x,y, size, hue, light){
-  var color = "hsla("  + hue + ",100%," + light +"%,1)";
-  ctx.fillStyle = color;
-  ctx.fillRect( x, y, size, size );
+function fade(){
+  clearCanvas(0.1);
 };
 
-function clocks(){
-  var count = 24,
-      size = count,
-      di = ( Math.sin(time/619)*0.21  ) + 3.9, 
-      dj = ( Math.sin(time/569)*0.19  ) + 3.9,
-      width = cw + 48,
-      height = ch + 48,
-      xAdj = Mouse.xA[0]/cw*8,
-      yAdj = Mouse.yA[0]/ch*8;
-  for (i = -48; i <= width; i += 24){
-    for (j = -48; j <= height; j +=  24){
-      var hue = 90 + i/15 + j/17 - time/8,
-          light = sin(Math.cos(i/di + xAdj + time/77) + Math.cos(j/dj + yAdj - time/44) - time/40, 80),
-          x = i + sin(j/4, count) - count;
-          y = j + sin(i/4, count) - count;
-      square(x,y, size, hue, light);
-    }
+function square(x,y, size, color, i){
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate( -(time/100) + (i/10) );
+  ctx.fillStyle = color
+  ctx.fillRect( -size/2, -size/2, size, 1 );
+  ctx.restore();
+};
+
+function ribbon(){
+  for (i = 0; i < 60; i++){
+    var hue = time - (i * 2);
+        hue = ( -time + i*2 ),
+        sat = 0,
+        light =  100, //(Math.sin(time/50) + 1) * 50,  //( Math.sin( i/4 ) +1 ) * 50,
+        alpha = 0.5,
+        color = "hsla("  + hue + "," + sat + "%," + light +"%," + alpha + ")",
+        size = ( Math.sin( i/10  + 11) + 1) * cMin/8 ,
+        followSpeed = 30 + (i/50);
+    Mouse.avg(0, 2, Mouse.x - cw/2, Mouse.y - ch/2);
+    square(Mouse.xA[i], Mouse.yA[i], size, color, i);
+    Mouse.avg(i+1, followSpeed, Mouse.xA[i], Mouse.yA[i]);
   }
-}
+};
 
 function animloop(){
   requestAnimFrame(animloop);
+  Mouse.path.capture();
   timer();
-  Mouse.avg(0, 30, Mouse.x, Mouse.y);
+  // fade();
   clearCanvas(1);
-  clocks();
+  ctx.save();
+  ctx.translate(cw/2, ch/2);
+  // ribbon();
+  var adj = cMin/4;
+  ctx.translate(-adj, 0);
+  ribbon();
+  ctx.translate(adj, adj);
+  ribbon();
+  ctx.translate(adj, -adj);
+  ribbon();
+  ctx.translate(-adj, -adj);
+  ribbon();
+  ctx.restore();
 };
 animloop();
 
@@ -153,7 +160,6 @@ document.addEventListener("touchmove", Mouse.events.move);
 
 document.addEventListener("mousedown", Mouse.events.down);
 document.addEventListener("touchstart", Mouse.events.down);
-document.addEventListener("touchstart", Mouse.events.move);
 
 document.addEventListener("touchend", Mouse.events.up);
 document.addEventListener("mouseup", Mouse.events.up);

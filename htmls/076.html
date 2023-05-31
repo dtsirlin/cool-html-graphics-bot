@@ -1,0 +1,145 @@
+
+<!-- saved from url=(0036)https://csh.bz/canvas/canvas14i.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>canvas14i</title>
+<!-- chris shier, noisia@gmail.com, http://csh.bz -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">  
+<link rel="stylesheet" type="text/css" href="./076_files/reset.css">
+<link rel="icon" href="http://csh.bz/favicon.ico">
+<style type="text/css">
+</style>
+</head>
+<body>
+<canvas id="canvas" height="1247" width="1280">nocanvas</canvas>
+
+
+<script type="text/javascript">
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function(/* function */ callback, /* DOMElement */ element){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+var getWindowSize = function(){
+  var w=window,
+      d=document,
+      e=d.documentElement,
+      g=d.getElementsByTagName('body')[0];
+
+  cw = w.innerWidth||e.clientWidth||g.clientWidth;
+  ch = w.innerHeight||e.clientHeight||g.clientHeight;
+
+  cMin = Math.min(cw, ch);
+  cMax = Math.max(cw, ch);
+}
+getWindowSize();
+
+var sizeCanvas = function(w, h){
+  canvas = document.getElementById('canvas');
+  canvas.setAttribute("height", h);
+  canvas.setAttribute("width", w);
+}
+sizeCanvas(cw, ch);
+
+var sizeContext = function(w, h){
+  ctx = document.getElementById('canvas').getContext('2d');
+  ctx.translate(w/2,h/2);
+}
+sizeContext(cw, ch);
+
+// background
+ctx.fillStyle = "hsla(0,0%,000%,1)";
+ctx.fillRect(-cw/2, -ch/2, cMax, cMax);
+
+var x = 0,
+    y = 0,
+    z = 0;
+
+counter = function(){
+	x+=1;
+}
+
+var clearCanvas = function(){
+	ctx.fillStyle = "hsla(0,0%,000%,1)";
+	ctx.fillRect(-cMax, -cMax, cMax*2, cMax*2);
+}
+
+var hypotenuse = function(a, b){
+  return Math.sqrt( (a*a) + (b*b||a*a) )/2;
+}
+
+var spinner = function(r, s, hue, light){
+  ctx.save();
+  ctx.rotate(0.004*x*r);
+  ctx.strokeStyle = "hsla(" + hue + ",000%,"+ light +"%,01)";
+  ctx.strokeRect( -s/2 - (-Math.sin(x/50)*s/4) , -s/2 - (Math.sin(x/51)*s/4), s, s );
+  ctx.restore();
+}
+
+var nest = function(a,b){
+  for (var i = b; i > 0.1; i-=0.02) {
+
+    var a = hypotenuse(a);
+
+    for (var j = 0.1; j < b*1.5; j+=0.02){
+
+      light = ((j*708)/2)/(i*20)*2;
+      hue = 0;
+      sin = Math.sin(x/100);
+
+      spinner( -i, a, hue , light );
+
+      // console.log(light);
+    }
+  };
+}
+
+// colors for hue: (x/10)+(j*1800)+(i*3600)
+
+var tinyDot = function(){
+  ctx.fillStyle = "white";
+  ctx.fillRect(-1,-1,2,2);
+}
+
+function animloop(){
+  requestAnimFrame(animloop);
+  counter();
+  clearCanvas();
+  nest(cMin, 0.34);
+  tinyDot();
+};
+animloop();
+
+function windowGotResized(){
+  //copy canvas
+  var canvasCopy = document.createElement("canvas"),
+      ow = cw,
+      oh = ch;
+  canvasCopy.setAttribute("width", ow);
+  canvasCopy.setAttribute("height", oh);
+  var contextCopy = canvasCopy.getContext('2d');
+  contextCopy.drawImage(canvas, 0, 0);
+
+  //resize canvas
+  getWindowSize();
+  sizeCanvas(cw, ch);
+
+  //paste copied canvas onto resized canvas
+  ctx.drawImage(canvasCopy, 0, 0, ow, oh, 0, 0, cw, ch);
+  sizeContext(cw, ch);
+}
+
+function reloadWindow(){window.location = window.location;}
+
+window.onresize = windowGotResized;
+
+</script>
+
+
+</body></html>

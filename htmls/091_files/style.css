@@ -1,0 +1,12 @@
+body, canvas {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	background-color: black;
+	cursor: crosshair;
+}
+canvas {
+	position: fixed;
+	top:0;
+	left:0;
+}

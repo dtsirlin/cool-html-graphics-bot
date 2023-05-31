@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/wajuta.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <title>JS Bin</title>
+<style id="jsbin-css">
+body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  
+}
+canvas {
+  position: fixed;
+  background: black;  
+}
+video {
+  position:absolute;
+  display: none;
+}
+</style>
+</head>
+<body>
+  <video></video>  
+  <canvas width="2560" height="1247"></canvas>
+<script id="jsbin-javascript">
+(function() {
+  var PI, animloop, canvas, ctx, sin, start, t;
+
+  canvas = document.querySelectorAll("canvas")[0];
+
+  ctx = canvas.getContext('2d');
+
+  console.log(ctx);
+
+  (canvas.resizeHandler = function() {
+    canvas.width = window.innerWidth;
+    return canvas.height = window.innerHeight;
+  })();
+
+  window.addEventListener('resize', canvas.resizeHandler, false);
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  start = Date.now();
+
+  t = 0;
+
+  animloop = function() {
+    var hint, wint, x, xp, xw, y, yp, yw, _i, _j, _ref, _ref1, _ref2, _ref3;
+    animloop.id = requestAnimationFrame(animloop);
+    t = (Date.now() - start) / 1000;
+    ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    wint = 10;
+    hint = 18;
+    for (y = _i = _ref = -hint * 10, _ref1 = canvas.width + hint * 10; hint > 0 ? _i < _ref1 : _i > _ref1; y = _i += hint) {
+      ctx.beginPath();
+      for (x = _j = _ref2 = -canvas.width * 0.5, _ref3 = canvas.width * 1.25; wint > 0 ? _j < _ref3 : _j > _ref3; x = _j += wint) {
+        xw = 0;
+        yw = 0;
+        xw += sin(y / -100) * 100;
+        yw += sin(-t / 5 + y / 60) * hint;
+        yw += sin(t / 7 + x / 100 + y / 80.) * hint * 2;
+        yw += sin(-x / 90 - t / 4) * hint / 2;
+        xp = x + xw;
+        yp = y + yw;
+        ctx.lineTo(xp, yp);
+      }
+      ctx.stroke();
+    }
+    return ctx.strokeStyle = "white";
+  };
+
+  animloop();
+
+}).call(this);
+
+</script>
+
+<script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">  <title>JS Bin</title>
+</head>
+<body>
+  <video></video>  
+  <canvas></canvas>
+</body>
+</html></script>
+
+<script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  
+}
+canvas {
+  position: fixed;
+  background: black;  
+}
+video {
+  position:absolute;
+  display: none;
+}</script>
+
+<script id="jsbin-source-javascript" type="text/coffeescript">canvas = document.querySelectorAll("canvas")[0]
+ctx = canvas.getContext '2d'
+console.log ctx
+do canvas.resizeHandler = ->
+  canvas.width =  window.innerWidth
+  canvas.height = window.innerHeight
+window.addEventListener 'resize', canvas.resizeHandler, false
+PI = Math.PI
+sin = (a) -> Math.sin(a)
+start = Date.now()
+t = 0
+animloop = ->
+  animloop.id = requestAnimationFrame animloop
+  t = (Date.now() - start)/1000
+  ctx.fillStyle = 'black'
+  ctx.fillRect 0, 0, canvas.width, canvas.height
+  wint = 10
+  hint = 18
+  for y in [-hint * 10 ... canvas.width + hint * 10] by hint
+    ctx.beginPath()
+    for x in [-canvas.width*0.5 ... canvas.width * 1.25] by wint
+      xw = 0
+      yw = 0
+      xw+= sin(y/-100)*100
+      yw+= sin(-t/5+y/60)*hint
+      yw+= sin(t/7+x/100 + y/(80))*hint*2
+      yw+= sin(-x/90 - t/4)*hint/2
+      xp = x + xw
+      yp = y + yw
+      ctx.lineTo xp, yp
+    ctx.stroke()
+  ctx.strokeStyle = "white"
+animloop()</script>
+</body></html>

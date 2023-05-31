@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/kakira.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <title>rbma</title>
+<style id="jsbin-css">
+body, html, img, div, canvas {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:100%;
+  width:100%;
+  position:fixed;
+}
+body{
+  background-color: black;
+}
+img {
+  position:fixed;
+  box-sizing:border-box;
+  height:700px;
+  border: 3px solid black;
+}
+img:hover{
+  /*opacity: 0;*/
+}
+canvas{
+  background-color:white;
+}
+
+</style>
+</head>
+<body>
+<div class="flexbox">
+  <div class="container">
+    <img src="./087_files/overlay.png">
+  <canvas width="640" height="700"></canvas></div>
+</div>
+<script id="jsbin-javascript">
+(function() {
+  var PI, animloop, canvas, cos, ctx, f, sign, sin, start, t;
+
+  canvas = document.createElement('canvas');
+
+  ctx = canvas.getContext('2d');
+
+  canvas.width = 640;
+
+  canvas.height = 700;
+
+  document.body.querySelectorAll(".container")[0].appendChild(canvas);
+
+  t = 0;
+
+  f = 0;
+
+  start = Date.now();
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  cos = function(a) {
+    return Math.cos(a);
+  };
+
+  sign = function(a) {
+    return Math.sign(a);
+  };
+
+  (animloop = function() {
+    var light;
+    animloop.id = requestAnimationFrame(animloop);
+    t = (Date.now() - start) / 1000;
+    f++;
+    ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = ctx.webkitImageSmoothingEnabled = false;
+    light = 50 + 50 * sin(f * PI / 9);
+    ctx.fillStyle = "hsla(" + (t * 100 * 0) + ", 0%, " + light + "%, 1)";
+    ctx.fillRect(0, 0, canvas.width, 2);
+    ctx.fillRect(0, canvas.height - 2, canvas.width, 2);
+    ctx.fillRect(0, 0, 2, canvas.height);
+    ctx.fillRect(canvas.width - 2, 0, 2, canvas.height);
+    ctx.save();
+    ctx.translate(canvas.width / 2 + sin(t / 7) / 2.5, canvas.height / 2 + cos(t / 8) / 2.5);
+    ctx.rotate(PI / 1080 * sin(t / 12));
+    ctx.drawImage(canvas, -canvas.width / 2 + cos(t / 10) / 2.5, -canvas.height / 2 + sin(t / 12) / 2.5);
+    return ctx.restore();
+  })();
+
+}).call(this);
+
+</script>
+
+<script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>rbma</title>
+</head>
+<body>
+<div class="flexbox">
+  <div class="container">
+    <img src="https://jsbin-user-assets.s3.amazonaws.com/noisia/overlay.png">
+  </div>
+</div>
+</body>
+</html></script>
+
+<script id="jsbin-source-css" type="text/css">body, html, img, div, canvas {
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.flexbox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height:100%;
+  width:100%;
+  position:fixed;
+}
+body{
+  background-color: black;
+}
+img {
+  position:fixed;
+  box-sizing:border-box;
+  height:700px;
+  border: 3px solid black;
+}
+img:hover{
+  opacity: 0;
+}
+canvas{
+  background-color:white;
+}
+</script>
+
+<script id="jsbin-source-javascript" type="text/coffeescript">canvas = document.createElement 'canvas'
+ctx = canvas.getContext '2d'
+canvas.width = 640
+canvas.height = 700
+document.body.querySelectorAll(".container")[0].appendChild canvas
+t=0
+f=0
+start = Date.now()
+PI = Math.PI
+sin = (a) -> Math.sin(a)
+cos = (a) -> Math.cos(a)
+sign = (a) -> Math.sign(a)
+do animloop = ->
+  animloop.id = requestAnimationFrame animloop
+  t = (Date.now() - start)/1000
+  f++
+  ctx.imageSmoothingEnabled = ctx.mozImageSmoothingEnabled = false
+  light = 50 + 50 * sin(f*PI/9)
+  ctx.fillStyle = "hsla(#{t*100*0}, 0%, #{light}%, 1)"
+  ctx.fillRect 0, 0, canvas.width, 2
+  ctx.fillRect 0, canvas.height-2, canvas.width, 2
+  ctx.fillRect 0, 0, 2, canvas.height
+  ctx.fillRect canvas.width - 2, 0, 2, canvas.height
+  ctx.save()
+  ctx.translate canvas.width/2 + sin(t/7)/2.5, canvas.height/2 + cos(t/8)/2.5
+  ctx.rotate PI/1080 * sin(t/12)
+  ctx.drawImage canvas, -canvas.width/2 + cos(t/10)/2.5, -canvas.height/2 + sin(t/12)/2.5
+  ctx.restore()
+</script>
+</body></html>

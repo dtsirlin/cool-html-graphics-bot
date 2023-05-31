@@ -1,21 +1,19 @@
 
-<!-- saved from url=(0027)https://csh.bz/29/30y3.html -->
+<!-- saved from url=(0026)https://csh.bz/29/30b.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>30y</title>
+<title>30a</title>
 <!-- chris shier, noisia@gmail.com, http://csh.bz -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">  <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black"> <meta name="apple-touch-fullscreen" content="yes">
-<link rel="stylesheet" type="text/css" href="./063_files/reset.css">
+<link rel="stylesheet" type="text/css" href="./015_files/reset.css">
 <link rel="icon" href="http://csh.bz/favicon.ico">
-<link rel="image_src" href="https://csh.bz/30u.png">
 <style type="text/css">
 </style>
-
 </head>
 <body>
 <canvas id="canvas" height="1247" width="1280">try this in a browser that supports the canvas tag</canvas>
 
 
-<script type="text/javascript" async="" src="./063_files/ga.js"></script><script type="text/javascript" src="./063_files/window.js"></script>
+<script type="text/javascript" async="" src="./015_files/ga.js"></script><script type="text/javascript" src="./015_files/window.js"></script>
 
 <script type="text/javascript">
 
@@ -53,9 +51,9 @@ Mouse.path.capture = function(){
     Mouse.path.x.pop();
     Mouse.path.y.pop();
   }
-};
+}
 
-pos = [cw/2, ch/2];
+pos = [ ]
 Mouse.avg = function(a, followSpeed, x, y){
 
   if(!Array.isArray(pos[a])) pos[a] = [0,0];
@@ -76,12 +74,12 @@ Mouse.avg = function(a, followSpeed, x, y){
   }
   Mouse.xA[a] = pos[a][0];
   Mouse.yA[a] = pos[a][1];
-};
+}
 
 Mouse.events.up = function(e){
   Mouse.down = false;
   Mouse.up = true;
-};
+}
 
 Mouse.events.down = function(e){
   // ios
@@ -92,71 +90,70 @@ Mouse.events.down = function(e){
   Mouse.down = true;
   Mouse.up = false;
   Mouse.clicks =+ 1;
-};
-
-var time = 0;
-Mouse.timer = 0;
-function timer(){
-  time += 1;
-  if (Mouse.down === true){
-    Mouse.timer += 1;
-  }
-};
-
-function clearCanvas(alpha){
-  ctx.fillStyle = "hsla(0,0%,000%," + alpha + ")";
-  ctx.fillRect(0, 0, cw, ch);
-};
-clearCanvas(1);
-
-function sin(x, max){
-  return (Math.sin(x)+1) * (max/2 || 1);
 }
-
-function square(x,y, size, hue, light){
-  var color = "hsla("  + hue + ",100%," + light +"%,1)";
-  ctx.fillStyle = color;
-  ctx.fillRect( x, y, size, size );
-};
-
-function clocks(){
-  var count = 24,
-      size = count,
-      di = ( Math.sin(time/619)*0.21  ) + 3.9, 
-      dj = ( Math.sin(time/569)*0.19  ) + 3.9,
-      width = cw + 48,
-      height = ch + 48,
-      xAdj = Mouse.xA[0]/cw*8,
-      yAdj = Mouse.yA[0]/ch*8;
-  for (i = -48; i <= width; i += 24){
-    for (j = -48; j <= height; j +=  24){
-      var hue = 90 + i/15 + j/17 - time/8,
-          light = sin(Math.cos(i/di + xAdj + time/77) + Math.cos(j/dj + yAdj - time/44) - time/40, 80),
-          x = i + sin(j/4, count) - count;
-          y = j + sin(i/4, count) - count;
-      square(x,y, size, hue, light);
-    }
-  }
-}
-
-function animloop(){
-  requestAnimFrame(animloop);
-  timer();
-  Mouse.avg(0, 30, Mouse.x, Mouse.y);
-  clearCanvas(1);
-  clocks();
-};
-animloop();
 
 document.addEventListener("mousemove", Mouse.events.move);
 document.addEventListener("touchmove", Mouse.events.move);
 
 document.addEventListener("mousedown", Mouse.events.down);
 document.addEventListener("touchstart", Mouse.events.down);
-document.addEventListener("touchstart", Mouse.events.move);
 
 document.addEventListener("touchend", Mouse.events.up);
 document.addEventListener("mouseup", Mouse.events.up);
+
+
+var time = 0;
+function timer(){
+  time += 1;
+}
+
+function clearCanvas(alpha){
+  ctx.fillStyle = "hsla(0,0%,000%," + alpha + ")";
+  ctx.fillRect(0, 0, cw, ch);
+}
+clearCanvas(1);
+
+function fade(){
+  clearCanvas(0.1);
+}
+
+function square(x,y, size, color, i){
+  ctx.save();
+  ctx.translate(x,y);
+  // ctx.rotate( -(time/100) + (i/50) );
+  ctx.fillStyle = color
+  ctx.fillRect( -size/2, -size/2, size, size );
+  ctx.restore();
+}
+
+function ribbon(){
+  var count = 360;
+  for (i = 1; i < count; i++){
+    var hue = time - (i * 2);
+        size = (Math.sin(i/4)+1)*12 ;
+        light = ( Math.sin( i/ (count/4) )  +1) * 50;
+        hue = i - time; 
+        color =  "hsla(" + hue + ",100%,50%,1)";
+        followSpeed = 5 + (i/500);
+    square(Mouse.xA[i], Mouse.yA[i], size, color, i);
+    Mouse.avg(i+1, followSpeed, Mouse.xA[i], Mouse.yA[i]);
+  }
+}
+
+
+function animloop(){
+  requestAnimFrame(animloop);
+  Mouse.path.capture();
+  timer();
+  // fade();
+  // clearCanvas(1);
+  ctx.save();
+  ctx.translate(cw/2, ch/2);
+  Mouse.avg(1, 2, Mouse.x - cw/2, Mouse.y - ch/2);
+  ribbon();
+  ctx.restore();
+};
+animloop();
 
 window.top.scrollTo(0, 1);
 </script>
@@ -174,5 +171,4 @@ window.top.scrollTo(0, 1);
   })();
 
 </script>
-
 </body></html>

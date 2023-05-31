@@ -1,0 +1,141 @@
+
+<!-- saved from url=(0018)https://csh.bz/31/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>31</title>
+<!-- chris shier, noisia@gmail.com, http://csh.bz -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">  
+<meta name="apple-mobile-web-app-capable" content="yes"> 
+<meta name="apple-mobile-web-app-status-bar-style" content="black"> 
+<meta name="apple-touch-fullscreen" content="yes">
+<link rel="stylesheet" type="text/css" href="./047_files/reset.css">
+<link rel="icon" href="http://csh.bz/favicon.ico">
+<link rel="image_src" href="https://csh.bz/31/">
+<style type="text/css">
+body{background-color: black;}
+</style>
+</head>
+<body>
+  <canvas id="canvas" height="1247" width="1280">try this in a browser that supports the canvas tag</canvas>
+
+
+<script type="text/javascript" async="" src="./047_files/ga.js"></script><script type="text/javascript" src="./047_files/window.js"></script>
+<script type="text/javascript" src="./047_files/mouse.js"></script>
+<script type="text/javascript" src="./047_files/stats.js"></script>
+
+<script type="text/javascript">
+
+// stats
+// var stats = new Stats();
+// stats.setMode(0); // 0: fps, 1: ms
+
+// // Align top-left
+// stats.domElement.style.position = 'absolute';
+// stats.domElement.style.left = '20px';
+// stats.domElement.style.top = '10px';
+
+// document.body.appendChild( stats.domElement );
+// end stats
+
+window.requestAnimFrame = (function(){
+  return  window.requestAnimationFrame       || 
+          window.webkitRequestAnimationFrame || 
+          window.mozRequestAnimationFrame    || 
+          window.oRequestAnimationFrame      || 
+          window.msRequestAnimationFrame     || 
+          function(/* function */ callback, /* DOMElement */ element){
+            window.setTimeout(callback, 1000 / 60);
+          };
+})();
+
+function clearCanvas(){
+  ctx.clearRect(0,0,cw,ch);
+}
+
+time = 0;
+function timer(){
+	time += 1;
+	if (Mouse.down){
+		Mouse.timer += 1;
+	}
+};
+
+function hsla(h,s,l,a){
+  return "hsla(" + (h||0) + "," + (s||100) + "%," + (l||50) + "%," + (a||1) + ")"; 
+}
+
+function square(x,y, size, color){
+  ctx.fillStyle = color;
+  ctx.fillRect(x,y,size,size);
+  // ctx.strokeStyle = color;
+  // ctx.strokeRect(x,y,size,size);
+}
+
+function grid(){
+  var size = Math.round(( cw+ch) / 32 ),
+      width = cw,
+      height = ch
+      interval = size-0.5 ,
+      init = -size - 0.5,
+      divisor = Math.sin(Mouse.timer/60)*0.55+1.5;
+      xAdj = Mouse.xA[0]/interval/divisor*2;
+      yAdj = Mouse.yA[0]/interval/divisor*2;
+  for (var i = init; i < width; i += interval) {
+        isize = i/size
+      for (var j = init; j < height; j += interval){
+        jsize = j/size;
+        x = i,
+        y = j,
+        h = i/15 + j/17 - Mouse.timer,
+        l =  (Math.sin( Math.cos(i/interval/divisor - xAdj  ) - Math.cos(j/interval/divisor/2 - yAdj ) + Mouse.timer/37) + 1)*40;
+        color = hsla(h, 100, l, 1) ;
+        square(x,y, size, color);
+      }
+  };
+
+  // ctx.clearRect(15,55, 100,80)
+  // ctx.fillStyle = "white";
+  // ctx.fillText( "Size:" + size + ". Color:" + Mouse.timer , 20,70);
+  // ctx.fillText( "Mouse: " +  Mouse.x + "x" + Mouse.y, 20,80);
+  // ctx.fillText( "Window: " + cw + "x" + ch, 20,90);
+  // ctx.fillText( "Pixels: " + cw * ch, 20,100);
+  // ctx.fillText( "Time:" + Math.round(time/60), 20,110);
+  // ctx.fillText( "Divisor:" + divisor, 20,120);
+  // ctx.fillText( "FollowSpeed:" + 50, 20,130);
+
+}
+
+function follow(){
+  var size = 16;
+  ctx.fillStyle="white";
+  ctx.fillRect( Mouse.xA[0] - size/2, Mouse.yA[0] - size/2, size, size )
+}
+
+
+function animloop(){
+  // stats.begin();
+  clearCanvas();
+  Mouse.avg(0, 50, Mouse.x, Mouse.y);
+  timer();
+  grid();
+  // follow();
+	requestAnimFrame(animloop);
+  // stats.end();
+};
+animloop();
+
+</script>
+
+<script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-3889624-4']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body></html>

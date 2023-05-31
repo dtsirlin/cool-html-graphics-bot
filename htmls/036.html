@@ -1,10 +1,10 @@
 
-<!-- saved from url=(0027)https://csh.bz/29/30y3.html -->
+<!-- saved from url=(0026)https://csh.bz/29/30y.html -->
 <html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>30y</title>
 <!-- chris shier, noisia@gmail.com, http://csh.bz -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=0">  <meta name="apple-mobile-web-app-capable" content="yes"> <meta name="apple-mobile-web-app-status-bar-style" content="black"> <meta name="apple-touch-fullscreen" content="yes">
-<link rel="stylesheet" type="text/css" href="./063_files/reset.css">
+<link rel="stylesheet" type="text/css" href="./036_files/reset.css">
 <link rel="icon" href="http://csh.bz/favicon.ico">
 <link rel="image_src" href="https://csh.bz/30u.png">
 <style type="text/css">
@@ -15,7 +15,7 @@
 <canvas id="canvas" height="1247" width="1280">try this in a browser that supports the canvas tag</canvas>
 
 
-<script type="text/javascript" async="" src="./063_files/ga.js"></script><script type="text/javascript" src="./063_files/window.js"></script>
+<script type="text/javascript" async="" src="./036_files/ga.js"></script><script type="text/javascript" src="./036_files/window.js"></script>
 
 <script type="text/javascript">
 
@@ -109,40 +109,70 @@ function clearCanvas(alpha){
 };
 clearCanvas(1);
 
+function fade(){
+  if (Mouse.down === true){
+    clearCanvas(0);
+  } else { if (time % 2 === 0){clearCanvas(0.1);}  }
+};
+
 function sin(x, max){
   return (Math.sin(x)+1) * (max/2 || 1);
 }
 
-function square(x,y, size, hue, light){
-  var color = "hsla("  + hue + ",100%," + light +"%,1)";
+function ribbon(){
+  var hue = time/20 % 360,
+      sat = 100,
+      light = 50,
+      alpha = 0.2,
+      color = "hsla("  + hue + "," + sat + "%," + light +"%," + alpha + ")",
+      height = 200,
+      width = 1.5,
+      rotate = time/77,
+      followSpeed = 50,
+      x = Mouse.xA[0],
+      y = Mouse.yA[0];
+  Mouse.avg(0, followSpeed, Mouse.x - cw/2, Mouse.y - ch/2);
+  square(x, y, height, width, color, rotate)
+}
+
+function square(x,y, height, width, color, rotate){
+  ctx.save();
+  ctx.translate(x,y);
+  ctx.rotate( rotate ); 
   ctx.fillStyle = color;
-  ctx.fillRect( x, y, size, size );
+  ctx.fillRect( 0, -width/2, height, width );
+  // ctx.strokeStyle = "black";
+  // ctx.strokeRect( 0, -width/2, height, width );
+  ctx.restore();
 };
 
 function clocks(){
-  var count = 24,
-      size = count,
-      di = ( Math.sin(time/619)*0.21  ) + 3.9, 
-      dj = ( Math.sin(time/569)*0.19  ) + 3.9,
-      width = cw + 48,
-      height = ch + 48,
-      xAdj = Mouse.xA[0]/cw*8,
-      yAdj = Mouse.yA[0]/ch*8;
-  for (i = -48; i <= width; i += 24){
-    for (j = -48; j <= height; j +=  24){
+  Mouse.avg(0, 20, Mouse.x, Mouse.y)
+  var count = 24;//sin(time/40000, 100);
+  for (i = -count * 2; i <= cw + count*2; i += count){
+    for (j = -count * 2; j <= ch + count*2; j +=  count){
       var hue = 90 + i/15 + j/17 - time/8,
-          light = sin(Math.cos(i/di + xAdj + time/77) + Math.cos(j/dj + yAdj - time/44) - time/40, 80),
-          x = i + sin(j/4, count) - count;
-          y = j + sin(i/4, count) - count;
-      square(x,y, size, hue, light);
+          sat = 100,
+          divisori = ( Math.sin(time/619)*0.2  ) + 3.9, 
+          divisorj = ( Math.sin(time/569)*0.1  ) + 3.9, 
+          light = sin(Math.cos(i/divisori + Mouse.xA[0] / cw*count/4) + Math.cos(j/divisorj + Mouse.yA[0] / ch*count/4) - time/40, 88),
+          alpha = 1,
+          color = "hsla("  + hue + "," + sat + "%," + light +"%," + alpha + ")",
+          height = count ,
+          width = height,
+          rotate = 0,
+          x = i + sin(time/113 + j/4, count*2) - count;
+          y = j + sin(time/111 + i/4, count*2) - count;
+      square(x,y, height, width, color, rotate);
     }
   }
 }
 
 function animloop(){
   requestAnimFrame(animloop);
+  // Mouse.path.capture();
   timer();
-  Mouse.avg(0, 30, Mouse.x, Mouse.y);
+  // fade();
   clearCanvas(1);
   clocks();
 };
@@ -153,7 +183,6 @@ document.addEventListener("touchmove", Mouse.events.move);
 
 document.addEventListener("mousedown", Mouse.events.down);
 document.addEventListener("touchstart", Mouse.events.down);
-document.addEventListener("touchstart", Mouse.events.move);
 
 document.addEventListener("touchend", Mouse.events.up);
 document.addEventListener("mouseup", Mouse.events.up);

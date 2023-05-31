@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)https://csh.bz/jsb/tolote.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="./085_files/three.min.js"></script>
+  
+  <title>tolote</title>
+  <style id="jsbin-css">
+    body, canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+canvas {
+  position: fixed;
+}
+</style>
+</head>
+
+<body>
+  <script id="jsbin-javascript">
+    (function() {
+  var Mouse, PI, abs, animloop, camera, canvas, cos, ctx, cubes, frame, geometry, material, renderer, resizeHandler, scene, side, sin, start, t, x, xside, y, yside, z, _i, _j, _k, _ref, _ref1, _ref2, _ref3, _ref4, _ref5;
+
+  t = 0;
+
+  start = Date.now();
+
+  frame = 0;
+
+  PI = Math.PI;
+
+  sin = function(a) {
+    return Math.sin(a);
+  };
+
+  cos = function(a) {
+    return Math.cos(a);
+  };
+
+  abs = function(a) {
+    return Math.abs(a);
+  };
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.OrthographicCamera(window.innerWidth / -2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / -2, 1, 1000);
+
+  renderer = new THREE.WebGLRenderer();
+
+  canvas = document.createElement('canvas');
+
+  ctx = canvas.getContext('2d');
+
+  (resizeHandler = function() {
+    canvas.left = window.innerWidth / -2;
+    canvas.right = window.innerWidth / 2;
+    canvas.bottom = window.innerHeight / -2;
+    canvas.top = window.innerHeight / 2;
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    canvas.width = window.innerWidth;
+    return canvas.height = window.innerHeight;
+  })();
+
+  window.addEventListener('resize', resizeHandler, false);
+
+  document.body.appendChild(renderer.domElement);
+
+  side = 50;
+
+  geometry = new THREE.BoxGeometry(side + 1, side + 1, side + 5);
+
+  material = new THREE.MeshBasicMaterial({});
+
+  cubes = [];
+
+  xside = 1.5;
+
+  yside = 1.2;
+
+  for (x = _i = _ref = canvas.left - side, _ref1 = canvas.right + side * 2, _ref2 = side * xside; _ref2 > 0 ? _i <= _ref1 : _i >= _ref1; x = _i += _ref2) {
+    for (y = _j = _ref3 = canvas.bottom - side, _ref4 = canvas.top + side, _ref5 = side * yside; _ref5 > 0 ? _j <= _ref4 : _j >= _ref4; y = _j += _ref5) {
+      for (z = _k = 0; _k <= 0; z = _k += 5) {
+        cubes.push(new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({
+          color: 0x00ffff,
+          transparent: true,
+          wireframe: false,
+          opacity: 1
+        })));
+        cubes[cubes.length - 1].position.x = x + (y % (side * yside * 2)) / (xside + 0.1);
+        cubes[cubes.length - 1].position.y = y;
+        cubes[cubes.length - 1].position.z = z;
+        scene.add(cubes[cubes.length - 1]);
+      }
+    }
+  }
+
+  camera.position.z = side * 2;
+
+  Mouse = {
+    x: null,
+    y: null,
+    events: {
+      move: function(e) {
+        Mouse.x = (Mouse.x + e.pageX) * 0.5;
+        return Mouse.y = (Mouse.y + e.pageY) * 0.5;
+      }
+    }
+  };
+
+  window.addEventListener('mousemove', Mouse.events.move, false);
+
+  animloop = function() {
+    var a, b, c, g, i, r, _l, _ref6;
+    animloop.id = requestAnimationFrame(animloop);
+    t = (Date.now() - start) / 1000;
+    frame++;
+    for (i = _l = 0, _ref6 = cubes.length; 0 <= _ref6 ? _l < _ref6 : _l > _ref6; i = 0 <= _ref6 ? ++_l : --_l) {
+      c = cubes[i];
+      c.scale.x = 1.15 + sin(PI * cos(c.position.y / canvas.height * PI) - PI * cos(c.position.x / canvas.width * PI) - t / 1.7);
+      c.rotation.z = PI / 2;
+      c.rotation.x = PI / 4;
+      c.rotation.y = PI / 4;
+      a = cos(c.position.x / canvas.width * PI * 2 - Mouse.x / canvas.width * PI + PI / 2) * cos(c.position.y / canvas.height * PI + Mouse.y / canvas.height * PI + PI / 2) * PI + t / 3;
+      r = sin(a) * 0.5 + 0.5;
+      g = sin(a + 1) * 0.5 + 0.5;
+      b = sin(a + 2 * 0) * 0.5 + 0.5;
+      cubes[i].material.color = new THREE.Color(r, g, b);
+    }
+    return renderer.render(scene, camera);
+  };
+
+  animloop();
+
+  console.dir(cubes[0]);
+
+}).call(this);
+
+</script><canvas width="2560" height="1247" style="width: 2560px; height: 1247px;"></canvas>
+  <script id="jsbin-source-html" type="text/html"><!DOCTYPE html>
+<html>
+<head>
+<script src="//cdnjs.cloudflare.com/ajax/libs/three.js/r67/three.min.js"><\/script>
+  <meta charset="utf-8">
+  <title>tolote</title>
+</head>
+<body>
+
+</body>
+</html></script>
+  <script id="jsbin-source-css" type="text/css">body, canvas {
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+canvas {
+  position: fixed;
+}</script>
+  <script id="jsbin-source-javascript" type="text/coffeescript">t = 0
+start = Date.now()
+frame = 0
+PI = Math.PI
+sin = (a) -> Math.sin(a)
+cos = (a) -> Math.cos(a)
+abs = (a) -> Math.abs(a)
+scene = new THREE.Scene()
+# camera = new THREE.PerspectiveCamera 37.8, window.innerWidth/window.innerHeight, 0.1, 1000
+camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, 1, 1000 )
+renderer = new THREE.WebGLRenderer()
+canvas = document.createElement 'canvas'
+ctx = canvas.getContext '2d'
+do resizeHandler = ->
+  canvas.left = window.innerWidth / - 2
+  canvas.right = window.innerWidth / 2
+  canvas.bottom = window.innerHeight / -2
+  canvas.top = window.innerHeight / 2
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
+  renderer.setSize window.innerWidth, window.innerHeight
+  canvas.width = window.innerWidth
+  canvas.height = window.innerHeight
+window.addEventListener 'resize', resizeHandler, false
+document.body.appendChild renderer.domElement
+side = 50
+geometry = new THREE.BoxGeometry side+1, side+1, side+5
+material = new THREE.MeshBasicMaterial {
+#   color: 0x00ffff
+#   wireframe: true
+}
+cubes = []
+xside = 1.5
+yside = 1.2
+for x in [canvas.left-side .. canvas.right+side*2] by side*xside # by 2.5#1.5
+  for y in [canvas.bottom-side .. canvas.top+side] by side*yside # by 2.5#1.5
+    for z in [0 .. 0] by 5
+      cubes.push new THREE.Mesh geometry, new THREE.MeshBasicMaterial(color: 0x00ffff, transparent: true, wireframe: false, opacity: 1)
+      cubes[cubes.length-1].position.x = x + ((y)%(side*yside*2))/(xside+0.1)
+      cubes[cubes.length-1].position.y = y
+      cubes[cubes.length-1].position.z = z
+#       cubes[cubes.]
+      scene.add cubes[cubes.length-1]
+
+camera.position.z = side*2
+
+Mouse =
+  x: null
+  y: null
+  events:
+    move: (e) ->
+      Mouse.x = (Mouse.x + e.pageX) * 0.5
+      Mouse.y = (Mouse.y + e.pageY) * 0.5
+
+window.addEventListener 'mousemove', Mouse.events.move, false
+
+animloop = ->
+  animloop.id = requestAnimationFrame animloop
+  t = (Date.now() - start)/1000
+  frame++
+#   camera.rotation.z-= 0.0005
+#   camera.rotation.z = PI/4
+  for i in [0 ... cubes.length]
+    c = cubes[i]
+#     cubes[i].scale.x = cubes[i].scale.y = z/side * (sin(t/1+c.position.z)*0.5+0.5)
+#     debugger
+#     cubes[i].rotation.y += 0.0003
+#     cubes[i].rotation.x += 0.0005
+#     cubes[i].rotation.z += 0.0007
+#     c.scale.x = sin((cos(c.position.x/canvas.width*PI)+cos(c.position.y/canvas.height*PI))*PI/4+sin(t)+t)
+#     c.scale.y = cos(c.position.y/canvas.height*PI+t)*sin(c.position.x/canvas.width*PI+t)*0.5+0.5
+    c.scale.x = 1.15 + sin(PI*cos(c.position.y/canvas.height*PI)-PI*cos(c.position.x/canvas.width*PI)-t/1.7)
+    c.rotation.z = PI/2#+t
+    c.rotation.x = PI/4#+t
+    c.rotation.y = PI/4#-t
+    a = cos(c.position.x/canvas.width*PI*2 - Mouse.x/canvas.width*PI+PI/2)*cos(c.position.y/canvas.height*PI + Mouse.y/canvas.height*PI+PI/2)*PI + t/3
+    r = sin(a)*0.5+0.5
+    g = sin(a+1)*0.5+0.5
+    b = sin(a+2*0)*0.5+0.5
+    cubes[i].material.color = new THREE.Color(r, g, b)
+#     return
+  renderer.render scene, camera
+
+animloop()
+console.dir(cubes[0])</script>
+
+
+</body></html>
