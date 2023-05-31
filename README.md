@@ -4,3 +4,12 @@ Opens a list of html files that render cool graphics in Google Chrome on loop. G
 Some of these html graphics allow for interaction with a mouse. Go to [./mouse-randomiser](/mouse-randomiser) for this.
 
 Both of these can be run at the same time. It is recommended to start mouse-randomiser first.
+
+## Preparation
+Install the following python packages before running the above scripts:
+```bash
+pip3 install selenium
+pip3 install mouse
+```
+
+> :information_source: If using Python 2.x, replace `pip3` with `pip`. If you don't have `pip`, Google how to install it.
