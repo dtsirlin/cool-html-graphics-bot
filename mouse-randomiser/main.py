@@ -94,19 +94,6 @@ def refineMouseLimits():
     yMin = yMin + yBuffer
     yMax = yMax - yBuffer
 
-    # avoid getting cursor too close to top of full screen app as cursor
-    # being over system menu seems to unhide it
-    #
-    # if top corner of screen has position of 0, then x% of it is still 0,
-    # so set absolute value
-
-    # if yMin == 0:
-    #     yMin = 100
-    # else:
-    #     yMin = yMin // 10 * 9
-
-    # yMax = yMax // 10 * 9
-
 if __name__ == '__main__':
     print('Starting...\n')
     print('If not have not yet set min and max position for x and y axis or hotkey to hide cursor, exit this by pressing Ctrl + C and set them in the script.\n')
