@@ -57,7 +57,7 @@ def getLoopTime():
         raise Exception('Value must be integer.')
 
 def getFiles(parentDirectory):
-    print('Reading files from:', parentDirectory)
+    print(f'\nReading files from: {parentDirectory}\n')
     return os.listdir(parentDirectory)
 
 def getSortedFiles(parentDirectory):
@@ -92,7 +92,9 @@ def openURL(chromedriver, url):
 
 if __name__ == '__main__':
     print('Starting...\n')
+
     inputValues = getParameters()
+
     directoryPath = inputValues[0]
     loopCount = inputValues[1]
     loopTime = inputValues[2]
