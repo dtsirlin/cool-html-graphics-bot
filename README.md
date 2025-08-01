@@ -19,4 +19,10 @@ pip3 install pyautogui
 pip3 install pynput
 ```
 
+If there's an issue with pip3 due to `externally-managed-environment`, try these commands in each folder before installing the above packages (which will also have to be installed in each folder):
+```bash
+python3 -m venv venv
+source venv/bin/activate
+```
+
 > :information_source: If you don't have `pip`, Google how to install it. Get Python 3 too as I'm not sure if the code works without any changes with Python 2.
