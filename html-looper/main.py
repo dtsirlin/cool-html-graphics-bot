@@ -5,6 +5,7 @@ import time
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 
 chrome_options = Options()
 chrome_options.add_argument('--kiosk')
@@ -75,8 +76,13 @@ def getHTMLFiles(unfilteredFiles):
     return outputFilesList
 
 def runLoop(files, loopCount, loopTime, directoryPath):
+    chromedriver_path = str(pl.Path().resolve() / 'chromedriver')
+    service = Service(executable_path=chromedriver_path)
+
     chromedriver = webdriver.Chrome(
-        str(pl.Path().resolve()) + '/chromedriver', chrome_options=chrome_options)
+        service=service,
+        options=chrome_options
+    )
 
     i = 0
 
@@ -86,6 +92,7 @@ def runLoop(files, loopCount, loopTime, directoryPath):
         openURL(chromedriver, 'file://' + directoryPath + '/' + file)
         i += 1
         time.sleep(loopTime)
+
 
 def openURL(chromedriver, url):
     chromedriver.get(url)
